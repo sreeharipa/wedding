@@ -67,17 +67,23 @@
   if (W.heroPhoto) { $("#heroImg").src = W.heroPhoto; $("#heroImg").alt = couple; }
   else $("#heroPortrait").remove();
 
-  /* ---------- Film (Google Drive embed, loads on click) ---------- */
+  /* ---------- Film (Google Drive player shown directly: one tap to play) ---------- */
   const V = W.video;
   if (!V || !V.driveId) $("#film").outerHTML = "";
   else {
     $("#filmTitle").textContent = V.title || "Our Film";
-    if (V.poster) $("#filmPoster").src = V.poster;
-    $("#filmPlay").addEventListener("click", () => {
-      window.__pauseMusic && window.__pauseMusic();
-      $("#film-frame").innerHTML =
-        `<iframe src="https://drive.google.com/file/d/${V.driveId}/preview" allow="autoplay; fullscreen" allowfullscreen title="${V.title || "Film"}"></iframe>`;
-    });
+    $("#film-frame").innerHTML =
+      `<iframe id="filmFrame" src="https://drive.google.com/file/d/${V.driveId}/preview" loading="lazy" allow="autoplay; fullscreen" allowfullscreen title="${V.title || "Film"}"></iframe>`;
+    // Taps inside the player can't be seen directly, but focus moves into the iframe:
+    // when that happens, pause the background song so the film's audio is clear.
+    let inFilm = false;
+    const checkFilm = () => {
+      const now = !!(document.activeElement && document.activeElement.id === "filmFrame");
+      if (now && !inFilm) window.__pauseMusic && window.__pauseMusic();
+      inFilm = now;
+    };
+    addEventListener("blur", () => setTimeout(checkFilm, 0));
+    setInterval(checkFilm, 500);
   }
 
   /* ---------- Family cards follow the name order ---------- */
