@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cut" />
+  <title>Wedding Invitation</title>
+  <meta name="description" content="You are warmly invited to our wedding." />
+  <meta property="og:title" content="You're invited to our wedding" />
+  <meta property="og:description" content="Join us as two hearts become one." />
+  <meta name="theme-color" content="#14281f" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🪔</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Pinyon+Script&family=Manrope:wght@400;500;600;700&family=Noto+Serif+Malayalam:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="locked">
+  <canvas id="petals" aria-hidden="true"></canvas>
+
+  <!-- ============ OPENING GATES ============ -->
+  <div id="gate" role="dialog" aria-label="Open invitation">
+    <div class="door door-left"><div class="door-inner"><div class="door-motif"></div></div></div>
+    <div class="door door-right"><div class="door-inner"><div class="door-motif"></div></div></div>
+    <div class="gate-center">
+      <p class="eyebrow gold">You are cordially invited</p>
+      <h1 class="gate-names"><span data-bind="groom.name"></span><span class="amp">&amp;</span><span data-bind="bride.name"></span></h1>
+      <p class="mal" data-bind="titleMalayalam"></p>
+      <button id="openBtn" class="seal" aria-label="Open the invitation">
+        <span class="seal-ring"></span>
+        <span class="seal-text">Open</span>
+      </button>
+      <p class="tap-hint">tap the seal</p>
+    </div>
+  </div>
+
+  <!-- ============ FLOATING CONTROLS ============ -->
+  <div class="controls">
+    <button id="musicBtn" class="ctrl" aria-label="Toggle music" hidden>
+      <svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M12 3v10.55A4 4 0 1 0 14 17V7h4V3h-6z"/></svg>
+      <span class="bars"><i></i><i></i><i></i></span>
+    </button>
+    <button id="shareBtn" class="ctrl" aria-label="Share invitation">
+      <svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M18 16.1c-.8 0-1.4.3-2 .8l-7.1-4.2c.1-.2.1-.5.1-.7s0-.5-.1-.7L16 7.2c.5.5 1.2.8 2 .8 1.7 0 3-1.3 3-3s-1.3-3-3-3-3 1.3-3 3c0 .2 0 .5.1.7L8 9.8C7.5 9.3 6.8 9 6 9c-1.7 0-3 1.3-3 3s1.3 3 3 3c.8 0 1.5-.3 2-.8l7.1 4.2c-.1.2-.1.4-.1.6 0 1.6 1.3 2.9 2.9 2.9s2.9-1.3 2.9-2.9-1.2-2.9-2.8-2.9z"/></svg>
+    </button>
+  </div>
+  <nav class="dots" aria-label="Sections"></nav>
+  <div class="toast" id="toast" role="status"></div>
+
+  <main>
+    <!-- ============ HERO ============ -->
+    <section id="home" class="hero" data-label="Home">
+      <div class="hero-bg"><div class="mandala spin"></div></div>
+      <div class="kasavu top"></div>
+      <div class="hero-content">
+        <svg class="lamp" viewBox="0 0 120 200" aria-hidden="true">
+          <defs>
+            <linearGradient id="brass" x1="0" x2="1">
+              <stop offset="0" stop-color="#8a6420"/><stop offset=".5" stop-color="#f1d38a"/><stop offset="1" stop-color="#8a6420"/>
+            </linearGradient>
+            <radialGradient id="glow"><stop offset="0" stop-color="#ffd27a" stop-opacity=".9"/><stop offset="1" stop-color="#ffb03b" stop-opacity="0"/></radialGradient>
+          </defs>
+          <circle class="flame-glow" cx="60" cy="34" r="34" fill="url(#glow)"/>
+          <path class="flame" d="M60 14 C66 26 70 34 60 46 C50 34 54 26 60 14Z" fill="#ffb648"/>
+          <path class="flame inner" d="M60 26 C63 32 64 37 60 43 C56 37 57 32 60 26Z" fill="#fff4cf"/>
+          <path d="M34 50 Q60 64 86 50 L82 58 Q60 70 38 58Z" fill="url(#brass)"/>
+          <rect x="56" y="62" width="8" height="70" fill="url(#brass)"/>
+          <ellipse cx="60" cy="96" rx="14" ry="5" fill="url(#brass)"/>
+          <ellipse cx="60" cy="132" rx="22" ry="6" fill="url(#brass)"/>
+          <path d="M40 132 Q60 150 80 132 L92 182 Q60 194 28 182Z" fill="url(#brass)"/>
+        </svg>
+        <p class="eyebrow">Together with their families</p>
+        <h2 class="names">
+          <span class="script-name" data-bind="groom.name"></span>
+          <span class="weds">weds</span>
+          <span class="script-name" data-bind="bride.name"></span>
+        </h2>
+        <p class="mal big" data-bind="titleMalayalam"></p>
+        <p class="tagline" data-bind="titleEnglish"></p>
+        <div class="date-band">
+          <span id="heroDay"></span>
+          <span class="sep"></span>
+          <span id="heroDate"></span>
+          <span class="sep"></span>
+          <span id="heroYear"></span>
+        </div>
+        <a href="#invite" class="scroll-cue"><span>Scroll</span><i></i></a>
+      </div>
+    </section>
+
+    <!-- ============ INVITATION ============ -->
+    <section id="invite" class="section paper" data-label="Invitation">
+      <div class="container narrow center">
+        <div class="kolam reveal">
+          <svg viewBox="0 0 200 200" aria-hidden="true">
+            <g class="draw" fill="none" stroke="currentColor" stroke-width="1.4">
+              <circle cx="100" cy="100" r="18"/>
+              <circle cx="100" cy="100" r="40"/>
+              <path d="M100 20 C130 50 130 70 100 100 C70 70 70 50 100 20Z"/>
+              <path d="M180 100 C150 130 130 130 100 100 C130 70 150 70 180 100Z"/>
+              <path d="M100 180 C70 150 70 130 100 100 C130 130 130 150 100 180Z"/>
+              <path d="M20 100 C50 70 70 70 100 100 C70 130 50 130 20 100Z"/>
+              <path d="M44 44 C80 52 86 70 100 100 C70 86 52 80 44 44Z"/>
+              <path d="M156 44 C148 80 130 86 100 100 C114 70 120 52 156 44Z"/>
+              <path d="M156 156 C120 148 114 130 100 100 C130 114 148 120 156 156Z"/>
+              <path d="M44 156 C52 120 70 114 100 100 C86 130 80 148 44 156Z"/>
+            </g>
+            <g fill="currentColor">
+              <circle cx="100" cy="10" r="2.5"/><circle cx="190" cy="100" r="2.5"/><circle cx="100" cy="190" r="2.5"/><circle cx="10" cy="100" r="2.5"/>
+              <circle cx="36" cy="36" r="2.5"/><circle cx="164" cy="36" r="2.5"/><circle cx="164" cy="164" r="2.5"/><circle cx="36" cy="164" r="2.5"/>
+            </g>
+          </svg>
+        </div>
+        <p class="eyebrow reveal">ശുഭമുഹൂർത്തം</p>
+        <h3 class="section-title reveal">The Invitation</h3>
+        <p class="lead reveal" data-bind="invitationMessage"></p>
+
+        <div class="muhurtham-card reveal">
+          <div class="mc-col">
+            <span class="mc-label">Date</span>
+            <span class="mc-value" id="mcDate"></span>
+          </div>
+          <div class="mc-divider"></div>
+          <div class="mc-col">
+            <span class="mc-label">Muhurtham</span>
+            <span class="mc-value" data-bind="muhurtham"></span>
+          </div>
+          <div class="mc-divider"></div>
+          <div class="mc-col">
+            <span class="mc-label">Venue</span>
+            <span class="mc-value" data-bind="venue.name"></span>
+          </div>
+        </div>
+        <div class="btn-row reveal">
+          <a class="btn" id="mainMap" target="_blank" rel="noopener">Open in Maps</a>
+          <button class="btn ghost" id="mainCal">Add to Calendar</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ COUNTDOWN ============ -->
+    <section id="countdown" class="section dark" data-label="Countdown">
+      <div class="container center">
+        <p class="eyebrow gold reveal">Counting every heartbeat</p>
+        <h3 class="section-title light reveal" id="cdTitle">Until we say “I do”</h3>
+        <div class="countdown reveal" id="cd">
+          <div class="cd-unit"><span class="cd-num" data-u="d">00</span><span class="cd-lbl">Days</span></div>
+          <div class="cd-unit"><span class="cd-num" data-u="h">00</span><span class="cd-lbl">Hours</span></div>
+          <div class="cd-unit"><span class="cd-num" data-u="m">00</span><span class="cd-lbl">Minutes</span></div>
+          <div class="cd-unit"><span class="cd-num" data-u="s">00</span><span class="cd-lbl">Seconds</span></div>
+        </div>
+        <p class="hashtag reveal" data-bind="hashtag"></p>
+      </div>
+      <div class="kasavu bottom"></div>
+    </section>
+
+    <!-- ============ STORY ============ -->
+    <section id="story" class="section paper" data-label="Our Story">
+      <div class="container">
+        <div class="center">
+          <p class="eyebrow reveal">How it all began</p>
+          <h3 class="section-title reveal">Our Story</h3>
+        </div>
+        <div class="timeline" id="timeline"></div>
+      </div>
+    </section>
+
+    <!-- ============ FAMILY ============ -->
+    <section id="family" class="section cream" data-label="Family">
+      <div class="container center">
+        <p class="mal reveal">മാതാപിതാക്കളുടെ അനുഗ്രഹാശിസ്സുകളോടെ</p>
+        <h3 class="section-title reveal">With the Blessings of Our Parents</h3>
+        <div class="family-grid">
+          <div class="family-card reveal">
+            <div class="arch"></div>
+            <span class="fc-role">The Groom</span>
+            <h4 class="fc-name" data-bind="groom.full"></h4>
+            <p class="fc-sub">Son of</p>
+            <p class="fc-parents"><span data-bind="families.groom.father"></span><br/>&amp;<br/><span data-bind="families.groom.mother"></span></p>
+            <p class="fc-place" data-bind="families.groom.place"></p>
+          </div>
+          <div class="family-heart reveal" aria-hidden="true">
+            <svg viewBox="0 0 64 64"><path d="M32 56 C10 40 4 28 4 20 A14 14 0 0 1 32 14 A14 14 0 0 1 60 20 C60 28 54 40 32 56Z" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+          </div>
+          <div class="family-card reveal">
+            <div class="arch"></div>
+            <span class="fc-role">The Bride</span>
+            <h4 class="fc-name" data-bind="bride.full"></h4>
+            <p class="fc-sub">Daughter of</p>
+            <p class="fc-parents"><span data-bind="families.bride.father"></span><br/>&amp;<br/><span data-bind="families.bride.mother"></span></p>
+            <p class="fc-place" data-bind="families.bride.place"></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ EVENTS ============ -->
+    <section id="events" class="section paper" data-label="Events">
+      <div class="container">
+        <div class="center">
+          <p class="eyebrow reveal">The itinerary</p>
+          <h3 class="section-title reveal">Celebrations</h3>
+        </div>
+        <div class="events" id="eventList"></div>
+      </div>
+    </section>
+
+    <!-- ============ GALLERY ============ -->
+    <section id="gallery" class="section cream" data-label="Gallery">
+      <div class="container">
+        <div class="center">
+          <p class="eyebrow reveal">Moments</p>
+          <h3 class="section-title reveal">Captured Memories</h3>
+        </div>
+        <div class="gallery" id="galleryGrid"></div>
+      </div>
+    </section>
+
+    <!-- ============ RSVP ============ -->
+    <section id="rsvp" class="section dark" data-label="RSVP">
+      <div class="kasavu top"></div>
+      <div class="container narrow">
+        <div class="center">
+          <p class="eyebrow gold reveal">Kindly respond</p>
+          <h3 class="section-title light reveal">Will you join us?</h3>
+          <p class="muted-light reveal" id="rsvpNote"></p>
+        </div>
+        <form id="rsvpForm" class="rsvp reveal" novalidate>
+          <label class="field">
+            <span>Your name</span>
+            <input name="name" required autocomplete="name" placeholder="Full name" />
+          </label>
+          <div class="field">
+            <span>Will you attend?</span>
+            <div class="choice">
+              <label><input type="radio" name="attend" value="Joyfully accepts" checked /><b>Joyfully accept</b></label>
+              <label><input type="radio" name="attend" value="Regretfully declines" /><b>Regretfully decline</b></label>
+            </div>
+          </div>
+          <label class="field" id="guestsField">
+            <span>Number of guests</span>
+            <div class="stepper">
+              <button type="button" data-step="-1" aria-label="Fewer guests">−</button>
+              <input name="guests" type="number" min="1" max="20" value="1" inputmode="numeric" />
+              <button type="button" data-step="1" aria-label="More guests">+</button>
+            </div>
+          </label>
+          <label class="field">
+            <span>Wishes for the couple (optional)</span>
+            <textarea name="wish" rows="3" placeholder="Your blessings…"></textarea>
+          </label>
+          <button class="btn gold full" type="submit">Send RSVP</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="kasavu top"></div>
+    <p class="mal">നന്ദി</p>
+    <p class="footer-names"><span data-bind="groom.name"></span> &amp; <span data-bind="bride.name"></span></p>
+    <p class="muted" id="footerDate"></p>
+    <p class="muted small">Made with love · <span data-bind="hashtag"></span></p>
+  </footer>
+
+  <!-- Lightbox -->
+  <div id="lightbox" hidden><button aria-label="Close">×</button><img alt="" /></div>
+  <audio id="bgm" loop preload="none"></audio>
+
+  <script src="config.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
