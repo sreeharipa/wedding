@@ -82,8 +82,11 @@
 
   /* ---------- Family cards follow the name order ---------- */
   if (W.brideFirst) {
-    const cards = $$(".family-card");
-    cards[0].parentNode.insertBefore(cards[1], cards[0]);
+    const [groomCard, brideCard] = $$(".family-card");
+    const heart = $(".family-heart");
+    // bride card, heart, groom card
+    groomCard.parentNode.insertBefore(brideCard, groomCard);
+    groomCard.parentNode.insertBefore(heart, groomCard);
   }
 
   /* ---------- Private ceremony note ---------- */
