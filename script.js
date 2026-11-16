@@ -120,6 +120,7 @@
     dress: '<svg viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M9 2h6l-1 4 4 6-2 10H8L6 12l4-6z"/></svg>'
   };
   const now = Date.now();
+  $("#eventList").dataset.count = W.events.length;
   $("#eventList").innerHTML = W.events.map((ev, i) => {
     const d = ev.date ? new Date(ev.date) : null;
     const past = d && d.getTime() + (ev.durationHours || 2) * 36e5 < now;
@@ -209,6 +210,7 @@
   );
   const picks = $("#eventPicks");
   picks.innerHTML = W.events.map((ev, i) => {
+    if (ev.rsvp === false) return "";
     const d = ev.date ? new Date(ev.date) : null;
     const when = d ? fmt(d, { day: "numeric", month: "short" }) : "Date TBA";
     return `<label><input type="checkbox" name="events" value="${i}" checked /><b>${ev.name}<small>${when} · ${ev.venue.split(",")[0]}</small></b></label>`;

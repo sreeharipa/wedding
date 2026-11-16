@@ -20,8 +20,6 @@ window.WEDDING = {
     mapUrl: "https://maps.google.com/?q=Newline+Orchid+Guruvayur"
   },
 
-  // Quiet line under the main card about the family-only temple ceremony ("" to hide)
-  privateNote: "The thalikettu will be held earlier that morning at Guruvayur Sreekrishna Temple, as a private ceremony with close family.",
 
   invitationMessage:
     "With the blessings of our elders and the grace of Guruvayurappan, we invite you and your family to join us on the auspicious occasion of our marriage.",
@@ -45,8 +43,19 @@ window.WEDDING = {
     }
   },
 
-  // timeText overrides the shown time; set date: "" to show "Date to be announced"
+  // timeText overrides the shown time; set date: "" to show "Date to be announced";
+  // rsvp: false keeps an event out of the RSVP picker
   events: [
+    {
+      name: "Thalikettu",
+      date: "2026-12-23T08:00:00+05:30",
+      timeText: "8:00 – 9:00 AM",
+      durationHours: 1,
+      venue: "Guruvayur Sreekrishna Temple",
+      address: "East Nada, Guruvayur",
+      mapUrl: "https://maps.google.com/?q=Guruvayur+Sreekrishna+Temple",
+      rsvp: false // listed as a ceremony, but not in the RSVP picker
+    },
     {
       name: "Wedding Celebration",
       date: "2026-12-23T10:30:00+05:30",
