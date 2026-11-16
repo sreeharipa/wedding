@@ -16,3 +16,7 @@ python3 -m http.server 8000
 Then open http://localhost:8000.
 
 Hosted on GitHub Pages: push to `main` and it updates automatically.
+
+## Bride-side version
+`akshaya/` is the bride's side invitation (Dr Akshaya first, no Kollam reception), live at `/wedding/akshaya/`.
+Its content lives in `akshaya/config.js`. After changing the main `index.html`, run `./make-akshaya.sh` to regenerate `akshaya/index.html`.

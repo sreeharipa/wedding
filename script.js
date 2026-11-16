@@ -2,6 +2,10 @@
   const W = window.WEDDING;
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  // Name order: groom first by default, bride first when brideFirst is set
+  W.first = W.brideFirst ? W.bride : W.groom;
+  W.second = W.brideFirst ? W.groom : W.bride;
+  const couple = `${W.first.name} & ${W.second.name}`;
   const get = (path) => path.split(".").reduce((o, k) => (o ? o[k] : ""), W);
   const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const TZ = "Asia/Kolkata";
@@ -9,7 +13,7 @@
 
   /* ---------- Bind text from config ---------- */
   $$("[data-bind]").forEach((el) => (el.textContent = get(el.dataset.bind) || ""));
-  document.title = `${W.groom.name} & ${W.bride.name} · Wedding Invitation`;
+  document.title = `${couple} · Wedding Invitation`;
 
   const wDate = new Date(W.date);
   $("#heroDay").textContent = fmt(wDate, { weekday: "long" });
@@ -25,7 +29,7 @@
     const s = new Date(ev.date), e = new Date(s.getTime() + (ev.durationHours || 2) * 36e5);
     const p = new URLSearchParams({
       action: "TEMPLATE",
-      text: `${ev.name} · ${W.groom.name} & ${W.bride.name}`,
+      text: `${ev.name} · ${couple}`,
       dates: `${icsStamp(s)}/${icsStamp(e)}`,
       location: `${ev.venue}, ${ev.address || ""}`,
       details: `${W.titleEnglish}\n${location.href}`
@@ -38,7 +42,7 @@
       "BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//wedding//EN", "BEGIN:VEVENT",
       `UID:${icsStamp(s)}-${Math.random().toString(36).slice(2)}@wedding`,
       `DTSTAMP:${icsStamp(new Date())}`, `DTSTART:${icsStamp(s)}`, `DTEND:${icsStamp(e)}`,
-      `SUMMARY:${ev.name} · ${W.groom.name} & ${W.bride.name}`,
+      `SUMMARY:${ev.name} · ${couple}`,
       `LOCATION:${ev.venue}, ${ev.address || ""}`,
       "BEGIN:VALARM", "TRIGGER:-P1D", "ACTION:DISPLAY", "DESCRIPTION:Reminder", "END:VALARM",
       "END:VEVENT", "END:VCALENDAR"
@@ -60,7 +64,7 @@
   $("#mainCal").addEventListener("click", () => addToCal(mainEvent));
 
   /* ---------- Hero portrait ---------- */
-  if (W.heroPhoto) $("#heroImg").src = W.heroPhoto;
+  if (W.heroPhoto) { $("#heroImg").src = W.heroPhoto; $("#heroImg").alt = couple; }
   else $("#heroPortrait").remove();
 
   /* ---------- Film (Google Drive embed, loads on click) ---------- */
@@ -74,6 +78,12 @@
       $("#film-frame").innerHTML =
         `<iframe src="https://drive.google.com/file/d/${V.driveId}/preview" allow="autoplay; fullscreen" allowfullscreen title="${V.title || "Film"}"></iframe>`;
     });
+  }
+
+  /* ---------- Family cards follow the name order ---------- */
+  if (W.brideFirst) {
+    const cards = $$(".family-card");
+    cards[0].parentNode.insertBefore(cards[1], cards[0]);
   }
 
   /* ---------- Private ceremony note ---------- */
@@ -137,7 +147,7 @@
   /* ---------- Gallery ---------- */
   const grid = $("#galleryGrid");
   if (W.gallery && W.gallery.length) {
-    grid.innerHTML = W.gallery.map((src, i) => `<figure class="reveal" style="transition-delay:${(i % 3) * 120}ms"><img src="${src}" loading="lazy" alt="Sreehari and Akshaya"/></figure>`).join("");
+    grid.innerHTML = W.gallery.map((src, i) => `<figure class="reveal" style="transition-delay:${(i % 3) * 120}ms"><img src="${src}" loading="lazy" alt="${couple}"/></figure>`).join("");
     const lb = $("#lightbox");
     grid.addEventListener("click", (e) => {
       const img = e.target.closest("img");
@@ -216,7 +226,7 @@
     const chosen = $$("input[name=events]:checked", form).map((c) => W.events[+c.value]);
     if (yes && !chosen.length) { picks.classList.add("err"); toast("Pick at least one celebration"); return; }
     const msg = [
-      `🪔 *RSVP — ${W.groom.name} & ${W.bride.name}*`,
+      `🪔 *RSVP — ${couple}*`,
       `Name: ${name}`,
       `Response: ${form.attend.value}${yes ? ` (${guests.value} guest${guests.value > 1 ? "s" : ""})` : ""}`,
       yes ? `Attending:\n${chosen.map((ev) => `• ${ev.name}`).join("\n")}` : "",
@@ -243,7 +253,7 @@
     tt = setTimeout(() => el.classList.remove("show"), 3200);
   }
   $("#shareBtn").addEventListener("click", async () => {
-    const data = { title: document.title, text: `You're invited to ${W.groom.name} & ${W.bride.name}'s wedding!`, url: location.href };
+    const data = { title: document.title, text: `You're invited to ${couple}'s wedding!`, url: location.href };
     try {
       if (navigator.share) await navigator.share(data);
       else { await navigator.clipboard.writeText(location.href); toast("Link copied — share the love!"); }
@@ -315,7 +325,7 @@
   /* ---------- Marquee ---------- */
   const fmtShort = (d) => fmt(d, { day: "2-digit", month: "2-digit", year: "numeric" }).replace(/\//g, " · ");
   const city = (ev) => (ev.address || "").split(",").pop().trim();
-  const line1 = ["Save the date", fmtShort(wDate), "Guruvayur", `${W.groom.name} & ${W.bride.name}`];
+  const line1 = ["Save the date", fmtShort(wDate), "Guruvayur", `${couple}`];
   const line2 = W.events.filter((e) => e.date).map((e) => `${e.name.split("·")[0].trim()} · ${city(e)} · ${fmt(new Date(e.date), { day: "numeric", month: "short" })}`);
   const fill = (el, items) => {
     const chunk = items.map((t) => `<span>${t}</span><b>✦</b>`).join("");
@@ -330,7 +340,13 @@
 
   /* ---------- Hero names: split letters ---------- */
   $$("#heroNames .script-name").forEach((el) => {
-    el.innerHTML = [...el.textContent].map((c, i) => `<span class="ch" style="--i:${i}">${c === " " ? "&nbsp;" : c}</span>`).join("");
+    const text = el.textContent;
+    let i = 0;
+    // Letters are grouped per word so a name never breaks mid-word
+    el.innerHTML = text.split(" ").map((word) =>
+      `<span class="word">${[...word].map((c) => `<span class="ch" style="--i:${i++}">${c}</span>`).join("")}</span>`
+    ).join(" ");
+    if (text.length > 8) el.classList.add("long");
   });
 
   /* ---------- Scroll progress + hero tilt ---------- */
