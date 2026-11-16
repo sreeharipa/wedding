@@ -609,3 +609,11 @@ body.beat .arch-glow { animation: glow var(--beat, .6s) ease-in-out infinite; }
 .film-poster:hover .film-play { transform: scale(1.1); }
 .film-cap { position: absolute; bottom: 22px; left: 0; right: 0; text-align: center; color: var(--ivory); font-size: .7rem; letter-spacing: .3em; text-transform: uppercase; }
 .gallery figure { box-shadow: 0 20px 40px -28px rgba(60, 40, 10, .5); }
+
+/* ---------- Compact jukebox: just a small spinning disc ---------- */
+.jukebox { display: block; padding: 4px; border-radius: 50%; max-width: none; gap: 0; }
+.jukebox .np, .jukebox .np-expand { display: none !important; }
+.jukebox .vinyl { width: 40px; height: 40px; display: block; }
+.jukebox .yt-wrap { position: absolute; width: 1px; height: 1px; overflow: hidden; opacity: 0; pointer-events: none; }
+.play-state::before { border-left-width: 10px; border-top-width: 6px; border-bottom-width: 6px; }
+@media (max-width: 520px) { .jukebox .vinyl { width: 36px; height: 36px; } }

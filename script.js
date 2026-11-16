@@ -271,6 +271,7 @@
     $("#npArtist").textContent = S.artist || "";
     document.documentElement.style.setProperty("--beat", `${60 / (S.bpm || 120)}s`);
     $("#vinylBtn").addEventListener("click", () => music.toggle());
+    $("#vinylBtn").title = `${S.title}${S.artist ? " · " + S.artist : ""}`;
     $("#npExpand").addEventListener("click", () => jb.classList.toggle("expanded"));
     if (S.file) {
       audio.src = S.file;
