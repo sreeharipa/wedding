@@ -648,7 +648,3 @@ html, body { overflow-anchor: none; }
 .mq-row { contain: layout paint; height: 1.25em; }
 .mq-row:first-child { font-size: clamp(2rem, 6vw, 4rem); }
 .mq-row.rev { font-size: clamp(1.6rem, 4.5vw, 3rem); }
-
-/* Marquee: both rows drift slowly the same way (opposite directions caused a motion illusion) */
-.mq-track { animation-duration: 70s; }
-.mq-row.rev .mq-track { animation-direction: normal; animation-duration: 90s; }
