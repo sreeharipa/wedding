@@ -709,3 +709,27 @@ html, body { overflow-anchor: none; }
 }
 #iChips span::before { content: ""; width: .55em; height: .55em; border: 2px solid var(--gold-2); transform: rotate(45deg); }
 .i-skip { position: absolute; top: max(14px, 2.5vw); right: max(14px, 2.5vw); z-index: 2; font-size: 11px; padding: 9px 16px; color: rgba(252,248,239,.75); background: rgba(10,23,18,.4); border: 1px solid rgba(217,180,94,.35); }
+
+/* Intro: a photo slides in with each word */
+#iWord.has-photo .w { font-size: clamp(60px, 11.5vw, 220px); }
+#iWord .c { max-width: 46vw; white-space: normal; line-height: 1.6; }
+#iPhoto {
+  position: absolute; right: 6vw; top: 50%; height: min(72vh, 680px); width: auto; max-width: 40vw; object-fit: cover;
+  border: 10px solid #fcf8ef; border-bottom-width: 34px; border-radius: 4px;
+  box-shadow: 0 34px 70px -24px rgba(0, 0, 0, .6);
+  opacity: 0; transform: translateY(-50%) translateX(70px) rotate(var(--tilt-in, 8deg)) scale(.92);
+  transition: opacity .35s ease, transform .7s var(--ease);
+}
+#iPhoto.show { opacity: 1; transform: translateY(-50%) rotate(var(--tilt, -3deg)); }
+#iWord:not(.has-photo) #iPhoto { display: none; }
+@media (max-width: 700px) {
+  #iWord { justify-content: flex-start; padding-top: 13vh; }
+  #iWord.has-photo .w { font-size: clamp(56px, 17vw, 120px); }
+  #iWord .c { max-width: 92vw; }
+  #iPhoto {
+    right: auto; left: 50%; top: auto; bottom: 7vh; height: 44vh; max-width: 84vw;
+    border-width: 7px; border-bottom-width: 24px;
+    transform: translateX(-50%) translateY(50px) rotate(var(--tilt-in, 8deg)) scale(.92);
+  }
+  #iPhoto.show { transform: translateX(-50%) rotate(var(--tilt, -3deg)); }
+}

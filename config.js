@@ -8,6 +8,15 @@ window.WEDDING = {
 
   titleEnglish: "Guruvayur, Kerala",
 
+  // Photo shown with each word in the intro
+  introPhotos: {
+    families: "photos/7.jpg",
+    hometowns: "photos/3.jpg",
+    apart: "photos/4.jpg",
+    celebrations: "photos/10.jpg",
+    date: "photos/9.jpg"
+  },
+
   // Map points for the intro (hometowns + venue)
   introPins: {
     groom: { city: "Kollam", lat: 8.89, lon: 76.6 },
@@ -59,6 +68,7 @@ window.WEDDING = {
       timeText: "8:00 – 9:00 AM",
       durationHours: 1,
       venue: "Guruvayur Sreekrishna Temple",
+      city: "Guruvayur", lat: 10.5945, lon: 76.0393,
       address: "East Nada, Guruvayur",
       mapUrl: "https://maps.google.com/?q=Guruvayur+Sreekrishna+Temple",
       rsvp: false // listed as a ceremony, but not in the RSVP picker
@@ -69,6 +79,7 @@ window.WEDDING = {
       timeText: "10:30 – 11:00 AM",
       durationHours: 0.5,
       venue: "Newline Orchid",
+      city: "Guruvayur", lat: 10.5960, lon: 76.0460,
       address: "Outer Ring Road, East Nada, Guruvayur",
       mapUrl: "https://maps.google.com/?q=Newline+Orchid+Guruvayur",
       highlight: true
@@ -79,6 +90,7 @@ window.WEDDING = {
       timeText: "5:00 – 9:00 PM",
       durationHours: 4,
       venue: "NJ Convention Centre",
+      city: "Kollam", lat: 9.0700, lon: 76.6500,
       address: "Cinemaparambu, Poruvazhy P.O., Kollam",
       mapUrl: "https://maps.google.com/?q=NJ+Convention+Centre+Cinemaparambu+Poruvazhy"
     },
@@ -88,6 +100,7 @@ window.WEDDING = {
       timeText: "5:00 – 8:30 PM",
       durationHours: 3.5,
       venue: "Al-Saj Gravity, Al-Saj International Convention Centre",
+      city: "Thiruvananthapuram", lat: 8.5700, lon: 76.8700,
       address: "Kazhakoottam, Thiruvananthapuram",
       mapUrl: "https://maps.google.com/?q=Al-Saj+International+Convention+Centre+Kazhakoottam"
     }

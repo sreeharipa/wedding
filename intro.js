@@ -114,12 +114,22 @@ window.WeddingIntro = (() => {
     // ----- Act 1: kinetic words -----
     const wordEl = $("iWord");
     if (t < T.map) {
-      const k = Math.min(S.words.length - 1, Math.floor(t / T.beat));
-      const w = S.words[k], local = (t - k * T.beat) / T.beat;
+      let k = 0;
+      while (k < S.words.length - 1 && t >= S.starts[k + 1]) k++;
+      const w = S.words[k], local = (t - S.starts[k]) / w[5];
       wordEl.style.opacity = 1; wordEl.style.background = w[2]; wordEl.style.color = w[3];
       if (S.k !== k) {
         S.k = k; $("iWText").textContent = w[0]; $("iWCap").textContent = w[1];
-        tone(k === S.words.length - 1 ? 990 : 660 + k * 40, 0.09, 0.12, "triangle");
+        const ph = $("iPhoto");
+        ph.classList.remove("show");
+        wordEl.classList.toggle("has-photo", !!w[4]);
+        if (w[4]) {
+          ph.src = w[4];
+          ph.style.setProperty("--tilt", (k % 2 ? 3 : -3) + "deg");
+          ph.style.setProperty("--tilt-in", (k % 2 ? 9 : -9) + "deg");
+          void ph.offsetWidth;
+          ph.classList.add("show");
+        }
       }
       const sc = 1 + 0.2 * Math.pow(1 - clamp(local * 3), 3);
       const jit = local < 0.12 ? `translate(${(Math.random() - .5) * 10}px, ${(Math.random() - .5) * 4}px)` : "";
@@ -135,10 +145,10 @@ window.WeddingIntro = (() => {
 
     if (t >= T.map - 0.05) {
       const m = t - T.map;
-      const zoom = eio((t - T.venue + 0.6) / 1.6);
-      const base = Math.min(W * 0.86 / (2.75 * COSLAT), H * 0.8 / 4.75);
+      const zoom = eio((t - T.venue + 0.6) / 1.6) * (1 - eio((t - T.route + 0.2) / 0.9));
+      const base = Math.min(W * 0.86 / (2.75 * COSLAT), H * (W > 900 ? 0.8 : 0.72) / 4.75);
       S.sc = base * (1 + 0.5 * zoom);
-      S.cx = W * (W > 900 ? 0.6 : 0.5); S.cy = H * (W > 900 ? 0.5 : 0.46);
+      S.cx = W * (W > 900 ? 0.6 : 0.5); S.cy = H * (W > 900 ? 0.5 : 0.41);
       S.lonC = lerp(76.1, S.venue.lon, zoom * 0.6); S.latC = lerp(10.5, S.venue.lat, zoom * 0.35);
       const dim = t >= T.title ? 1 - 0.82 * ease((t - T.title) / 0.6) : 1;
       const p = [0, 0], q = [0, 0];
@@ -213,10 +223,11 @@ window.WeddingIntro = (() => {
         const u = clamp((t - tk) / 0.6), e = ease(u);
         proj(pin.lon, pin.lat, p);
         const r = 60 * (1 - e) + 12, L = 7 + 6 * (1 - e);
-        ctx.globalAlpha = dim * ldim * (t > T.venue + 0.8 ? 0.55 : 1);
+        ctx.globalAlpha = dim * ldim * (t > T.route ? 0.3 : t > T.venue + 0.8 ? 0.55 : 1);
         brackets(p[0], p[1], r, L, u < 1 ? "#fcf8ef" : "#d9b45e");
         ctx.fillStyle = "#e0566a"; ctx.fillRect(p[0] - 2.5, p[1] - 2.5, 5, 5);
-        label(p[0] + (r + 10), p[1], 1, pin.name.toUpperCase(), `${pin.city.toUpperCase()} · ${fmtLL(pin)}`, u, fs * 0.85);
+        // hometown labels step aside once the celebrations route starts
+        if (t < T.route) label(p[0] + (r + 10), p[1], 1, pin.name.toUpperCase(), `${pin.city.toUpperCase()} · ${fmtLL(pin)}`, u, fs * 0.85);
         ctx.globalAlpha = 1;
       });
 
@@ -245,6 +256,47 @@ window.WeddingIntro = (() => {
           ctx.fillText(S.venueSub, vp[0], vp[1] - r - vfs * 0.55);
         } else label(vp[0] - (r + 12), vp[1], -1, S.venue.city.toUpperCase(), S.venueSub, u, fs * 1.15);
         ctx.globalAlpha = 1;
+      }
+
+      // celebrations route: dotted line through every stop, in date order
+      if (t >= T.route && S.stops.length > 1) {
+        const pts = S.stops.map((st) => proj(st.lon, st.lat, [0, 0]));
+        ctx.save();
+        ctx.setLineDash([3, 7]); ctx.lineCap = "round";
+        ctx.strokeStyle = "#f1dc9e"; ctx.lineWidth = 2.2; ctx.globalAlpha = dim * ldim;
+        ctx.shadowColor = "rgba(241,220,158,.8)"; ctx.shadowBlur = 8;
+        for (let i = 1; i < pts.length; i++) {
+          const a = eio((t - T.route - (i - 1) * T.leg) / (T.leg * 0.75));
+          if (a <= 0) break;
+          ctx.beginPath(); ctx.moveTo(pts[i - 1][0], pts[i - 1][1]);
+          ctx.lineTo(lerp(pts[i - 1][0], pts[i][0], a), lerp(pts[i - 1][1], pts[i][1], a));
+          ctx.stroke();
+        }
+        ctx.restore();
+        S.stops.forEach((st, i) => {
+          if (i === 0) return; // the venue already has its lock-on
+          const tk = T.route + (i - 1) * T.leg + T.leg * 0.7;
+          if (t < tk) return;
+          once("stop" + i, () => {});
+          const u = clamp((t - tk) / 0.5), e = ease(u), p2 = pts[i];
+          const r = 46 * (1 - e) + 11, L = 6 + 5 * (1 - e);
+          ctx.globalAlpha = dim * ldim;
+          brackets(p2[0], p2[1], r, L, u < 1 ? "#fcf8ef" : "#f1dc9e");
+          ctx.fillStyle = "#f1dc9e"; ctx.beginPath(); ctx.arc(p2[0], p2[1], 3.5, 0, 7); ctx.fill();
+          // labels go on the sea side (left); if that would run off-screen, centre them below
+          const big = st.city.toUpperCase(), sfs = fs * 0.85;
+          ctx.font = `900 ${sfs}px "Inter Tight", "Helvetica Neue", Arial, sans-serif`;
+          const wBig = ctx.measureText(big).width;
+          if (p2[0] - (r + 10) - wBig > 8) label(p2[0] - (r + 10), p2[1], -1, big, st.sub, u, sfs);
+          else {
+            ctx.textAlign = "center"; ctx.fillStyle = "#fcf8ef";
+            ctx.fillText(big.slice(0, Math.ceil(big.length * clamp(u * 1.6))), p2[0], p2[1] + r + sfs * 1.1);
+            ctx.font = `700 ${Math.round(sfs * 0.48)}px "JetBrains Mono", ui-monospace, Menlo, monospace`; ctx.fillStyle = "#d9b45e";
+            ctx.globalAlpha *= clamp(u * 2 - 1);
+            ctx.fillText(st.sub, p2[0], p2[1] + r + sfs * 1.75);
+          }
+          ctx.globalAlpha = 1;
+        });
       }
     }
 
@@ -304,24 +356,45 @@ window.WeddingIntro = (() => {
     const time = f({ hour: "2-digit", minute: "2-digit", hour12: false });
     const dist = km(p1, p2);
     const G = "#12261d", I = "#fcf8ef", M = "#8b2333", Au = "#d9b45e", Au3 = "#f1dc9e";
+    const PH = Wcfg.introPhotos || {};
+    const dayOf = (e) => new Intl.DateTimeFormat("en-IN", { timeZone: "Asia/Kolkata", day: "numeric", month: "short" }).format(new Date(e.date)).toUpperCase();
+    const stops = [];
+    Wcfg.events.filter((e) => e.date && e.lat != null).sort((a, b) => new Date(a.date) - new Date(b.date)).forEach((e) => {
+      const city = e.city || (e.address || "").split(",").pop().trim();
+      let st = stops.find((x) => Math.abs(x.lat - e.lat) < 0.08 && Math.abs(x.lon - e.lon) < 0.08);
+      if (!st) stops.push(st = { city, lat: e.lat, lon: e.lon, days: [], names: [] });
+      if (!st.days.includes(dayOf(e))) st.days.push(dayOf(e));
+      st.names.push(e.name.split("·")[0].trim().toUpperCase());
+    });
+    stops.forEach((st) => (st.sub = `${st.days.join(" & ")} · ${st.names.join(" + ")}`));
     S = {
-      k: -1, pins: [p1, p2], venue,
+      k: -1, pins: [p1, p2], venue, stops,
       venueSub: `${dd}.${mm}.${yyyy} · ${time} IST · LOCKED`,
+      // [big text, caption, background, colour, photo, seconds on screen]
       words: [
-        ["2", "people", G, I], ["2", "families", I, G], [`${dist} km`, "apart", M, I],
-        [String(Wcfg.events.length), "celebrations", Au, G], [`${dd}.${mm}`, yyyy, G, Au3],
-        ["so", "", I, M], ["where?", "", M, Au3]
+        ["2", "families", I, G, PH.families, 0.95],
+        ["2", `hometowns · ${p1.city} & ${p2.city}`, M, I, PH.hometowns, 1.05],
+        [`${dist} km`, "apart", G, Au3, PH.apart, 0.95],
+        [String(Wcfg.events.length), "celebrations", Au, G, PH.celebrations, 0.95],
+        [`${dd}.${mm}`, yyyy, G, I, PH.date, 0.95],
+        ["so…", "", I, M, null, 0.65],
+        ["where?", "", M, Au3, null, 0.9]
       ],
-      term: [
+      term: [].concat([
         `> locate ${p1.name.toLowerCase()} · ${p1.city.toLowerCase()}`,
         `> locate ${p2.name.toLowerCase()} · ${p2.city.toLowerCase()}`,
         `> distance ${dist} km · searching for common ground`,
         `> match: ${venue.city.toLowerCase()} · ${dd}.${mm}.${yyyy}`,
+        stops.length > 1 ? `> route: ${stops.map((st) => st.city.toLowerCase()).join(' → ')}` : null,
         `> status: getting married ✓`
-      ]
+      ]).filter(Boolean)
     };
-    const beat = 0.52, map = S.words.length * beat + 0.2;
-    S.T = { beat, map, pins: map + 1.5, arcs: map + 2.9, venue: map + 4.3, title: map + 5.7, end: map + 9.1 };
+    S.starts = []; let acc = 0;
+    S.words.forEach((w) => { S.starts.push(acc); acc += w[5]; });
+    const map = acc + 0.2;
+    const venueT = map + 4.3, leg = 0.85, legs = Math.max(0, S.stops.length - 1);
+    const routeT = venueT + 1.2, titleT = legs ? routeT + legs * leg + 0.9 : venueT + 1.4;
+    S.T = { map, pins: map + 1.5, arcs: map + 2.9, venue: venueT, route: routeT, leg, title: titleT, end: titleT + 3.7 };
 
     // title DOM
     $("iH1").innerHTML = `<span>${first.name}</span><span class="amp">&amp;</span><span>${second.name}</span>`;
@@ -339,6 +412,10 @@ window.WeddingIntro = (() => {
     tStart = performance.now() / 1000; running = true;
     raf = requestAnimationFrame(frame);
   }
+
+  // Preload the intro photos so they are ready by the time guests tap Open
+  const PRE = [];
+  Object.values((window.WEDDING && window.WEDDING.introPhotos) || {}).forEach((src) => { const im = new Image(); im.src = src; PRE.push(im); });
 
   return { play, stop: finish };
 })();
