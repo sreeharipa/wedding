@@ -492,22 +492,39 @@
 
   /* ---------- Opening gate ---------- */
   const gate = $("#gate");
-  $("#skipIntro").addEventListener("click", () => gate.classList.add("skipped"));
-  $("#openBtn").addEventListener("click", () => {
-    music.play();
-    gate.classList.add("open");
+  $("#startK").textContent = `Wedding invitation · ${fmt(wDate, { day: "2-digit", month: "2-digit", year: "numeric" }).replace(/\//g, ".")}`;
+  let started = false, revealed = false;
+  const reveal = (celebrate = true) => {
+    if (revealed) return;
+    revealed = true;
+    gate.classList.add("gone");
     document.body.classList.remove("locked");
     document.body.classList.add("opened");
-    burst(innerWidth / 2, innerHeight / 2, 140);
-    setTimeout(() => volley(7, 280, true), 500);
+    if (celebrate) {
+      burst(innerWidth / 2, innerHeight / 2, 120);
+      setTimeout(() => volley(6, 280, true), 400);
+    }
     setTimeout(() => (ambient = true), 1200);
-    setTimeout(() => gate.classList.add("gone"), 1700);
+  };
+  $("#openBtn").addEventListener("click", () => {
+    if (started) return;
+    started = true;
+    music.play();
+    gate.classList.add("leaving");
+    setTimeout(() => gate.classList.add("gone"), 500);
+    if (window.WeddingIntro) window.WeddingIntro.play(W, () => reveal(true));
+    else reveal(true);
   });
+  $("#skipIntro").addEventListener("click", () => {
+    if (started) return;
+    started = true;
+    music.play();
+    reveal(true);
+  });
+  $("#iSkip").addEventListener("click", () => window.WeddingIntro && window.WeddingIntro.stop());
   // Let people skip the gate when linked straight to a section
   if (location.hash && location.hash !== "#home") {
-    gate.classList.add("open", "gone");
-    document.body.classList.remove("locked");
-    document.body.classList.add("opened");
-    ambient = true;
+    started = true;
+    reveal(false);
   }
 })();

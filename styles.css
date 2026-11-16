@@ -655,3 +655,57 @@ html, body { overflow-anchor: none; }
 .script-name.long { white-space: nowrap; font-size: clamp(2.5rem, 9.5vw, 5.6rem); }
 /* Four events: 2 x 2 instead of 3 + 1 */
 .events[data-count="4"] { max-width: 900px; }
+
+/* =====================================================================
+   V4 — start screen + cinematic intro (Marco Polo-style)
+   ===================================================================== */
+#gate {
+  background: radial-gradient(ellipse at 30% 40%, #1c3a2c, #0a1712 75%);
+  display: block; transition: opacity .5s ease;
+}
+#gate.leaving { opacity: 0; pointer-events: none; }
+#gate .start {
+  position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; gap: 28px;
+  padding: 0 max(16px, 6vw); color: var(--ivory);
+}
+#gate .k { font-family: "JetBrains Mono", ui-monospace, Menlo, monospace; color: var(--gold-2); font-size: 12px; letter-spacing: .24em; text-transform: uppercase; }
+#gate .big { font-family: "Inter Tight", "Helvetica Neue", Arial, sans-serif; font-weight: 900; font-size: clamp(44px, 9vw, 132px); line-height: .9; letter-spacing: -.045em; margin: 0; }
+#gate .big span { color: var(--gold-2); }
+#gate .row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+#gate .go, #gate .ghost-btn, .i-skip {
+  font-family: "JetBrains Mono", ui-monospace, Menlo, monospace; text-transform: uppercase; letter-spacing: .14em;
+  border-radius: 999px; cursor: pointer;
+}
+#gate .go { background: linear-gradient(135deg, var(--gold-3), var(--gold-2) 55%, var(--gold)); color: var(--green); font-weight: 700; font-size: 14px; padding: 16px 30px; box-shadow: 0 0 0 0 rgba(241,220,158,.5); animation: pulse 2.4s ease-in-out infinite; }
+#gate .ghost-btn { color: rgba(252,248,239,.7); font-size: 12px; padding: 12px 18px; border: 1px solid rgba(217,180,94,.35); }
+#gate .go:hover, #gate .ghost-btn:hover { filter: brightness(1.12); }
+
+#intro { position: fixed; inset: 0; z-index: 110; background: #0a1712; overflow: hidden; transition: opacity .9s ease, transform 1s var(--ease); }
+#intro.out { opacity: 0; transform: scale(1.06); pointer-events: none; }
+#introCanvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+#iWord {
+  position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center;
+  padding: 0 max(16px, 5vw); opacity: 0; pointer-events: none;
+}
+#iWord .w { font-family: "Inter Tight", "Helvetica Neue", Arial, sans-serif; font-weight: 900; font-size: clamp(64px, 19vw, 320px); line-height: .85; letter-spacing: -.055em; white-space: nowrap; transform-origin: left center; }
+#iWord .c { font-family: "JetBrains Mono", ui-monospace, Menlo, monospace; font-size: clamp(12px, 1.5vw, 22px); letter-spacing: .22em; text-transform: uppercase; margin-top: 1.1em; }
+#iTerm {
+  position: absolute; left: max(16px, 3.5vw); bottom: max(22px, 6vh); font-family: "JetBrains Mono", ui-monospace, Menlo, monospace;
+  font-size: clamp(10px, 1.1vw, 16px); line-height: 1.75; color: var(--gold-3); white-space: pre; opacity: 0; pointer-events: none;
+  text-shadow: 0 0 12px rgba(10,23,18,.9);
+}
+#iTitle {
+  position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;
+  gap: clamp(10px, 1.6vw, 22px); padding: 0 16px; opacity: 0; pointer-events: none; color: var(--ivory);
+}
+#iTitle .e { font-family: "JetBrains Mono", ui-monospace, Menlo, monospace; color: var(--gold-2); font-size: clamp(11px, 1.1vw, 15px); letter-spacing: .3em; text-transform: uppercase; }
+#iH1 { margin: 0; font-family: var(--script); font-weight: 400; color: var(--gold-3); font-size: clamp(54px, 10vw, 170px); line-height: 1.02; display: flex; flex-direction: column; align-items: center; }
+#iH1 .amp { font-family: var(--serif); font-style: italic; color: var(--ivory); font-size: .38em; margin: -.05em 0; }
+#iTitle .sub { font-family: var(--serif); font-style: italic; font-size: clamp(17px, 2vw, 28px); color: rgba(252,248,239,.85); opacity: 0; }
+#iChips { display: flex; flex-wrap: wrap; justify-content: center; gap: clamp(8px, 1.6vw, 24px); max-width: 980px; }
+#iChips span {
+  opacity: 0; display: inline-flex; align-items: center; gap: .6em; font-family: "JetBrains Mono", ui-monospace, Menlo, monospace;
+  font-weight: 700; font-size: clamp(10px, 1.05vw, 14px); letter-spacing: .14em; text-transform: uppercase; color: var(--ivory);
+}
+#iChips span::before { content: ""; width: .55em; height: .55em; border: 2px solid var(--gold-2); transform: rotate(45deg); }
+.i-skip { position: absolute; top: max(14px, 2.5vw); right: max(14px, 2.5vw); z-index: 2; font-size: 11px; padding: 9px 16px; color: rgba(252,248,239,.75); background: rgba(10,23,18,.4); border: 1px solid rgba(217,180,94,.35); }

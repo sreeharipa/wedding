@@ -14,32 +14,36 @@
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🪔</text></svg>" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Pinyon+Script&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=21" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Pinyon+Script&family=Manrope:wght@400;500;600;700&family=Inter+Tight:wght@800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css?v=25" />
 </head>
 <body class="locked">
   <canvas id="petals" aria-hidden="true"></canvas>
 
-  <!-- ============ OPENING GATES ============ -->
+  <!-- ============ START SCREEN ============ -->
   <div id="gate" role="dialog" aria-label="Open invitation">
-    <div class="door door-left"><div class="door-inner"><div class="door-motif"></div></div></div>
-    <div class="door door-right"><div class="door-inner"><div class="door-motif"></div></div></div>
-    <div class="intro" aria-hidden="true">
-      <p class="intro-line l1">Two hearts. A celebration of togetherness.</p>
-      <p class="intro-line l2"><em>Guruvayur</em> · 23 December 2026</p>
+    <div class="start">
+      <p class="k" id="startK"></p>
+      <h1 class="big">Sound on.<br><span>Then tap to open.</span></h1>
+      <div class="row">
+        <button class="go" id="openBtn" type="button">Open invitation</button>
+        <button class="ghost-btn" id="skipIntro" type="button">Skip intro</button>
+      </div>
     </div>
-    <div class="gate-center">
-      <p class="eyebrow gold">You are cordially invited</p>
-      <h1 class="gate-names"><span data-bind="first.name"></span><span class="amp">&amp;</span><span data-bind="second.name"></span></h1>
-      <p class="gate-tag" data-bind="titleEnglish"></p>
-      <button id="openBtn" class="seal" aria-label="Open the invitation">
-        <span class="seal-ring"></span>
-        <span class="seal-text">Open</span>
-      </button>
-      <p class="tap-hint">tap the seal</p>
-      <p class="sound-hint">Best experienced with sound on</p>
+  </div>
+
+  <!-- ============ CINEMATIC INTRO ============ -->
+  <div id="intro" aria-hidden="true" hidden>
+    <canvas id="introCanvas"></canvas>
+    <div id="iWord"><div class="w" id="iWText"></div><div class="c" id="iWCap"></div></div>
+    <div id="iTerm"></div>
+    <div id="iTitle">
+      <div class="e">The wedding of</div>
+      <h1 id="iH1"></h1>
+      <div class="sub" id="iSub"></div>
+      <div id="iChips"></div>
     </div>
-    <button class="skip-intro" id="skipIntro">Skip intro</button>
+    <button class="i-skip" id="iSkip" type="button">Skip ›</button>
   </div>
 
   <!-- ============ FLOATING CONTROLS ============ -->
@@ -100,7 +104,7 @@
           <ellipse cx="60" cy="132" rx="22" ry="6" fill="url(#brass)"/>
           <path d="M40 132 Q60 150 80 132 L92 182 Q60 194 28 182Z" fill="url(#brass)"/>
         </svg>
-        <p class="eyebrow">Together with their families</p>
+        <p class="eyebrow">The wedding of</p>
         <h2 class="names" id="heroNames">
           <span class="script-name" data-bind="first.name"></span>
           <span class="weds">weds</span>
@@ -180,8 +184,8 @@
     <!-- ============ COUNTDOWN ============ -->
     <section id="countdown" class="section dark" data-label="Countdown">
       <div class="container center">
-        <p class="eyebrow gold reveal">Counting every heartbeat</p>
-        <h3 class="section-title light reveal" id="cdTitle">Until we say “I do”</h3>
+        <p class="eyebrow gold reveal">The countdown</p>
+        <h3 class="section-title light reveal" id="cdTitle">Until the big day</h3>
         <div class="countdown reveal" id="cd">
           <div class="cd-unit"><span class="cd-num" data-u="d">00</span><span class="cd-lbl">Days</span></div>
           <div class="cd-unit"><span class="cd-num" data-u="h">00</span><span class="cd-lbl">Hours</span></div>
@@ -326,7 +330,8 @@
   <!-- Lightbox -->
   <div id="lightbox" hidden><button aria-label="Close">×</button><img alt="" /></div>
 
-  <script src="config.js?v=21"></script>
-  <script src="script.js?v=21"></script>
+  <script src="config.js?v=25"></script>
+  <script src="intro.js?v=25"></script>
+  <script src="script.js?v=25"></script>
 </body>
 </html>

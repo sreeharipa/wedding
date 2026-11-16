@@ -6,7 +6,14 @@ window.WEDDING = {
   groom: { name: "Sreehari", full: "Sreehari" },
   bride: { name: "Akshaya", full: "Dr Akshaya" },
 
-  titleEnglish: "Two hearts, one journey",
+  titleEnglish: "Guruvayur, Kerala",
+
+  // Map points for the intro (hometowns + venue)
+  introPins: {
+    groom: { city: "Kollam", lat: 8.89, lon: 76.6 },
+    bride: { city: "Thrissur", lat: 10.53, lon: 76.21 },
+    venue: { city: "Guruvayur", lat: 10.594, lon: 76.041 }
+  },
 
   // Portrait shown beside the names on the first screen
   heroPhoto: "photos/1.jpg",
@@ -88,8 +95,9 @@ window.WEDDING = {
 
   // Photo URLs or paths like "photos/1.jpg" (leave [] to show decorative frames)
   gallery: [
-    "photos/2.jpg", "photos/6.jpg", "photos/3.jpg", "photos/5.jpg",
-    "photos/4.jpg", "photos/7.jpg", "photos/1.jpg", "photos/8.jpg"
+    "photos/9.jpg", "photos/6.jpg", "photos/10.jpg", "photos/3.jpg",
+    "photos/5.jpg", "photos/11.jpg", "photos/4.jpg", "photos/7.jpg",
+    "photos/1.jpg", "photos/8.jpg"
   ],
 
   // Engagement film from Google Drive (file must be shared "Anyone with the link")
