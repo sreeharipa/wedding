@@ -641,3 +641,10 @@ body.beat .arch-glow { animation: glow var(--beat, .6s) ease-in-out infinite; }
 @media (max-width: 520px) { .scroll-prompt { bottom: 18px; padding: 11px 16px; font-size: .62rem; letter-spacing: .16em; } }
 /* Three events: one row on desktop */
 .events { max-width: 1100px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 290px), 1fr)); }
+
+/* Firefox: stop scroll anchoring from nudging the page while things animate */
+html, body { overflow-anchor: none; }
+.marquee { contain: layout paint; }
+.mq-row { contain: layout paint; height: 1.25em; }
+.mq-row:first-child { font-size: clamp(2rem, 6vw, 4rem); }
+.mq-row.rev { font-size: clamp(1.6rem, 4.5vw, 3rem); }
