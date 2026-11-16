@@ -309,7 +309,11 @@
   const line2 = W.events.filter((e) => e.date).map((e) => `${e.name.split("·")[0].trim()} · ${city(e)} · ${fmt(new Date(e.date), { day: "numeric", month: "short" })}`);
   const fill = (el, items) => {
     const chunk = items.map((t) => `<span>${t}</span><b>✦</b>`).join("");
-    el.innerHTML = chunk.repeat(4) + chunk.repeat(4);
+    // Keep the strip short: iOS Safari stops drawing very wide animated layers.
+    // Two identical halves, each just wide enough to cover the screen.
+    el.innerHTML = chunk;
+    const reps = Math.max(1, Math.ceil((innerWidth * 1.1) / el.scrollWidth));
+    el.innerHTML = chunk.repeat(reps * 2);
   };
   fill($("#mq1"), line1);
   fill($("#mq2"), line2);

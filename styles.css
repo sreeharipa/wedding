@@ -617,3 +617,8 @@ body.beat .arch-glow { animation: glow var(--beat, .6s) ease-in-out infinite; }
 .jukebox .yt-wrap { position: absolute; width: 1px; height: 1px; overflow: hidden; opacity: 0; pointer-events: none; }
 .play-state::before { border-left-width: 10px; border-top-width: 6px; border-bottom-width: 6px; }
 @media (max-width: 520px) { .jukebox .vinyl { width: 36px; height: 36px; } }
+
+/* Marquee: lighter layers for iOS Safari */
+.mq-track { animation-duration: 28s; will-change: transform; transform: translate3d(0,0,0); }
+.mq-row.rev .mq-track { animation-duration: 34s; }
+@keyframes marquee { from { transform: translate3d(0,0,0); } to { transform: translate3d(-50%,0,0); } }
