@@ -72,8 +72,20 @@
   if (!V || !V.driveId) $("#film").outerHTML = "";
   else {
     $("#filmTitle").textContent = V.title || "Our Film";
-    $("#film-frame").innerHTML =
-      `<iframe id="filmFrame" src="https://drive.google.com/file/d/${V.driveId}/preview" loading="lazy" allow="autoplay; fullscreen" allowfullscreen title="${V.title || "Film"}"></iframe>`;
+    const phone = matchMedia("(max-width: 760px), (pointer: coarse)").matches;
+    if (phone) {
+      // Drive's embedded player is broken on phones: open the film full screen in Drive instead
+      $("#film-frame").innerHTML = `
+        <a class="film-poster" id="filmLink" href="https://drive.google.com/file/d/${V.driveId}/view" target="_blank" rel="noopener">
+          ${V.poster ? `<img src="${V.poster}" alt="" loading="lazy" />` : ""}
+          <span class="film-play"><svg viewBox="0 0 24 24" width="30" height="30"><path fill="currentColor" d="M8 5v14l11-7z"/></svg></span>
+          <span class="film-cap">Watch the film · opens full screen</span>
+        </a>`;
+      $("#filmLink").addEventListener("click", () => window.__pauseMusic && window.__pauseMusic());
+    } else {
+      $("#film-frame").innerHTML =
+        `<iframe id="filmFrame" src="https://drive.google.com/file/d/${V.driveId}/preview" loading="lazy" allow="autoplay; fullscreen" allowfullscreen title="${V.title || "Film"}"></iframe>`;
+    }
     // Taps inside the player can't be seen directly, but focus moves into the iframe:
     // when that happens, pause the background song so the film's audio is clear.
     let inFilm = false;
