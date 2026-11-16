@@ -168,19 +168,32 @@
       guests.value = Math.min(20, Math.max(1, (+guests.value || 1) + +b.dataset.step));
     })
   );
-  $$("input[name=attend]", form).forEach((r) =>
-    r.addEventListener("change", () => $("#guestsField").classList.toggle("hide", form.attend.value !== "Joyfully accepts"))
-  );
+  const picks = $("#eventPicks");
+  picks.innerHTML = W.events.map((ev, i) => {
+    const d = ev.date ? new Date(ev.date) : null;
+    const when = d ? fmt(d, { day: "numeric", month: "short" }) : "Date TBA";
+    return `<label><input type="checkbox" name="events" value="${i}" checked /><b>${ev.name}<small>${when} · ${ev.venue.split(",")[0]}</small></b></label>`;
+  }).join("");
+  const syncAttend = () => {
+    const no = form.attend.value !== "Joyfully accepts";
+    $("#guestsField").classList.toggle("hide", no);
+    $("#eventsField").classList.toggle("hide", no);
+  };
+  $$("input[name=attend]", form).forEach((r) => r.addEventListener("change", syncAttend));
+  picks.addEventListener("change", () => picks.classList.remove("err"));
   form.addEventListener("submit", (e) => {
     e.preventDefault();
     const name = form.name.value.trim();
     if (!name) { form.name.classList.add("err"); form.name.focus(); return; }
     form.name.classList.remove("err");
     const yes = form.attend.value === "Joyfully accepts";
+    const chosen = $$("input[name=events]:checked", form).map((c) => W.events[+c.value]);
+    if (yes && !chosen.length) { picks.classList.add("err"); toast("Pick at least one celebration"); return; }
     const msg = [
       `🪔 *RSVP — ${W.groom.name} & ${W.bride.name}*`,
       `Name: ${name}`,
       `Response: ${form.attend.value}${yes ? ` (${guests.value} guest${guests.value > 1 ? "s" : ""})` : ""}`,
+      yes ? `Attending:\n${chosen.map((ev) => `• ${ev.name}`).join("\n")}` : "",
       form.wish.value.trim() ? `Wishes: ${form.wish.value.trim()}` : ""
     ].filter(Boolean).join("\n");
     if (W.rsvpWhatsApp) {
@@ -191,7 +204,7 @@
     toast(yes ? "Thank you! We can't wait to celebrate with you 💛" : "Thank you — you'll be missed 💛");
     if (yes) burst(innerWidth / 2, innerHeight / 2, 80);
     form.reset();
-    $("#guestsField").classList.remove("hide");
+    syncAttend();
   });
 
   /* ---------- Toast & share ---------- */

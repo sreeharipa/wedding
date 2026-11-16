@@ -90,7 +90,7 @@ window.WEDDING = {
   gallery: [],
 
   // RSVP goes to WhatsApp. Country code + number, digits only, e.g. "919876543210"
-  rsvpWhatsApp: "",
+  rsvpWhatsApp: "919647921150",
   rsvpDeadline: "",
 
   // Optional background music: path to an mp3, e.g. "music/song.mp3"
