@@ -10,6 +10,14 @@ window.WEDDING = {
 
   titleEnglish: "Guruvayur, Kerala",
 
+  // Stops traced on the intro map (includes the Kollam reception for the route animation)
+  mapEvents: [
+    { name: "Thalikettu", date: "2026-12-23T08:00:00+05:30", city: "Guruvayur", lat: 10.5945, lon: 76.0393 },
+    { name: "Wedding Celebration", date: "2026-12-23T10:30:00+05:30", city: "Guruvayur", lat: 10.5960, lon: 76.0460 },
+    { name: "Reception · Kollam", date: "2026-12-25T17:00:00+05:30", city: "Kollam", lat: 9.0700, lon: 76.6500 },
+    { name: "Reception · Thiruvananthapuram", date: "2026-12-26T17:00:00+05:30", city: "Thiruvananthapuram", lat: 8.5700, lon: 76.8700 }
+  ],
+
   // Photo shown with each word in the intro
   introPhotos: {
     families: "../photos/7.jpg",

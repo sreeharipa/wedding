@@ -359,7 +359,7 @@ window.WeddingIntro = (() => {
     const PH = Wcfg.introPhotos || {};
     const dayOf = (e) => new Intl.DateTimeFormat("en-IN", { timeZone: "Asia/Kolkata", day: "numeric", month: "short" }).format(new Date(e.date)).toUpperCase();
     const stops = [];
-    Wcfg.events.filter((e) => e.date && e.lat != null).sort((a, b) => new Date(a.date) - new Date(b.date)).forEach((e) => {
+    (Wcfg.mapEvents || Wcfg.events).filter((e) => e.date && e.lat != null).sort((a, b) => new Date(a.date) - new Date(b.date)).forEach((e) => {
       const city = e.city || (e.address || "").split(",").pop().trim();
       let st = stops.find((x) => Math.abs(x.lat - e.lat) < 0.08 && Math.abs(x.lon - e.lon) < 0.08);
       if (!st) stops.push(st = { city, lat: e.lat, lon: e.lon, days: [], names: [] });
@@ -377,8 +377,8 @@ window.WeddingIntro = (() => {
         [`${dist} km`, "apart", G, Au3, PH.apart, 0.95],
         [String(Wcfg.events.length), "celebrations", Au, G, PH.celebrations, 0.95],
         [`${dd}.${mm}`, yyyy, G, I, PH.date, 0.95],
-        ["so…", "", I, M, null, 0.65],
-        ["where?", "", M, Au3, null, 0.9]
+        ["so…", "", I, M, null, 0.95],
+        ["where?", "", M, Au3, null, 0.95]
       ],
       term: [].concat([
         `> locate ${p1.name.toLowerCase()} · ${p1.city.toLowerCase()}`,
