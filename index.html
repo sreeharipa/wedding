@@ -15,7 +15,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Pinyon+Script&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=8" />
+  <link rel="stylesheet" href="styles.css?v=9" />
 </head>
 <body class="locked">
   <canvas id="petals" aria-hidden="true"></canvas>
@@ -68,6 +68,10 @@
   </div>
   <nav class="dots" aria-label="Sections"></nav>
   <div class="toast" id="toast" role="status"></div>
+  <a href="#invite" class="scroll-prompt" id="scrollPrompt" aria-label="Scroll down to see the invitation">
+    <span>Scroll for details</span>
+    <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </a>
 
   <main>
     <!-- ============ HERO ============ -->
@@ -155,7 +159,7 @@
           </div>
           <div class="mc-divider"></div>
           <div class="mc-col">
-            <span class="mc-label">Muhurtham</span>
+            <span class="mc-label">Time</span>
             <span class="mc-value" data-bind="muhurtham"></span>
           </div>
           <div class="mc-divider"></div>
@@ -164,6 +168,7 @@
             <span class="mc-value" data-bind="venue.name"></span>
           </div>
         </div>
+        <p class="private-note reveal" id="privateNote"></p>
         <ul class="notes reveal" id="notes"></ul>
         <div class="btn-row reveal">
           <a class="btn" id="mainMap" target="_blank" rel="noopener">Open in Maps</a>
@@ -321,7 +326,7 @@
   <!-- Lightbox -->
   <div id="lightbox" hidden><button aria-label="Close">×</button><img alt="" /></div>
 
-  <script src="config.js?v=8"></script>
-  <script src="script.js?v=8"></script>
+  <script src="config.js?v=9"></script>
+  <script src="script.js?v=9"></script>
 </body>
 </html>

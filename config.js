@@ -11,14 +11,17 @@ window.WEDDING = {
   // Portrait shown beside the names on the first screen
   heroPhoto: "photos/1.jpg",
 
-  // Main ceremony (countdown target)
-  date: "2026-12-23T08:00:00+05:30",
-  muhurtham: "8:00 AM – 9:00 AM",
+  // Main celebration guests attend (countdown target)
+  date: "2026-12-23T10:30:00+05:30",
+  muhurtham: "10:30 – 11:00 AM",
   venue: {
-    name: "Guruvayur Sreekrishna Temple",
-    address: "East Nada, Guruvayur, Thrissur",
-    mapUrl: "https://maps.google.com/?q=Guruvayur+Sreekrishna+Temple"
+    name: "Newline Orchid",
+    address: "Outer Ring Road, East Nada, Guruvayur",
+    mapUrl: "https://maps.google.com/?q=Newline+Orchid+Guruvayur"
   },
+
+  // Quiet line under the main card about the family-only temple ceremony ("" to hide)
+  privateNote: "The thalikettu will be held earlier that morning at Guruvayur Sreekrishna Temple, as a private ceremony with close family.",
 
   invitationMessage:
     "With the blessings of our elders and the grace of Guruvayurappan, we invite you and your family to join us on the auspicious occasion of our marriage.",
@@ -45,23 +48,14 @@ window.WEDDING = {
   // timeText overrides the shown time; set date: "" to show "Date to be announced"
   events: [
     {
-      name: "Thalikettu",
-      date: "2026-12-23T08:00:00+05:30",
-      timeText: "Muhurtham 8:00 – 9:00 AM",
-      durationHours: 1,
-      venue: "Guruvayur Sreekrishna Temple",
-      address: "East Nada, Guruvayur",
-      mapUrl: "https://maps.google.com/?q=Guruvayur+Sreekrishna+Temple",
-      highlight: true
-    },
-    {
       name: "Wedding Celebration",
       date: "2026-12-23T10:30:00+05:30",
       timeText: "10:30 – 11:00 AM",
       durationHours: 0.5,
       venue: "Newline Orchid",
       address: "Outer Ring Road, East Nada, Guruvayur",
-      mapUrl: "https://maps.google.com/?q=Newline+Orchid+Guruvayur"
+      mapUrl: "https://maps.google.com/?q=Newline+Orchid+Guruvayur",
+      highlight: true
     },
     {
       name: "Reception · Kollam",

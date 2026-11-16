@@ -622,3 +622,22 @@ body.beat .arch-glow { animation: glow var(--beat, .6s) ease-in-out infinite; }
 .mq-track { animation-duration: 28s; will-change: transform; transform: translate3d(0,0,0); }
 .mq-row.rev .mq-track { animation-duration: 34s; }
 @keyframes marquee { from { transform: translate3d(0,0,0); } to { transform: translate3d(-50%,0,0); } }
+
+/* ---------- Private ceremony note ---------- */
+.private-note { margin: 22px auto 0; max-width: 520px; font-family: var(--serif); font-style: italic; font-size: 1.05rem; color: var(--muted); }
+
+/* ---------- Floating scroll prompt ---------- */
+.hero .scroll-cue { display: none; }
+.scroll-prompt {
+  position: fixed; left: 50%; bottom: 22px; z-index: 56; translate: -50% 30px; opacity: 0; pointer-events: none;
+  display: inline-flex; align-items: center; gap: 8px; padding: 12px 20px; border-radius: 999px; text-decoration: none;
+  background: linear-gradient(135deg, var(--gold-3), var(--gold-2) 55%, var(--gold)); color: var(--green);
+  font-size: .7rem; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; white-space: nowrap;
+  box-shadow: 0 12px 28px -8px rgba(80, 60, 20, .55); transition: opacity .5s, translate .6s var(--ease);
+}
+.scroll-prompt.show { opacity: 1; translate: -50% 0; pointer-events: auto; transition-delay: 2.2s; }
+.scroll-prompt svg { animation: nudgeDown 1.4s ease-in-out infinite; }
+@keyframes nudgeDown { 0%, 100% { transform: translateY(-2px); } 50% { transform: translateY(4px); } }
+@media (max-width: 520px) { .scroll-prompt { bottom: 18px; padding: 11px 16px; font-size: .62rem; letter-spacing: .16em; } }
+/* Three events: one row on desktop */
+.events { max-width: 1100px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 290px), 1fr)); }

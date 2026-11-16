@@ -76,6 +76,16 @@
     });
   }
 
+  /* ---------- Private ceremony note ---------- */
+  if (W.privateNote) $("#privateNote").textContent = W.privateNote;
+  else $("#privateNote").hidden = true;
+
+  /* ---------- Floating scroll prompt (hides once guests start scrolling) ---------- */
+  const prompt = $("#scrollPrompt");
+  const syncPrompt = () => prompt.classList.toggle("show", document.body.classList.contains("opened") && scrollY < 120);
+  addEventListener("scroll", syncPrompt, { passive: true });
+  setInterval(syncPrompt, 800);
+
   /* ---------- Notes ---------- */
   const notesEl = $("#notes");
   if (W.notes && W.notes.length) notesEl.innerHTML = W.notes.map((n) => `<li>${n}</li>`).join("");
