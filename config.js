@@ -93,8 +93,15 @@ window.WEDDING = {
   rsvpWhatsApp: "919647921150",
   rsvpDeadline: "",
 
-  // Optional background music: path to an mp3, e.g. "music/song.mp3"
-  music: "",
+  // Background music. youtubeId plays from YouTube (no file hosting needed).
+  // Or set file: "music/song.mp3" to use your own audio file instead.
+  song: {
+    youtubeId: "dElRVQFqj-k",
+    file: "",
+    title: "Marry You",
+    artist: "Bruno Mars",
+    bpm: 145
+  },
 
   hashtag: "#SreehariWedsAkshaya"
 };

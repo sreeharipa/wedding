@@ -224,14 +224,92 @@
     } catch (_) {}
   });
 
-  /* ---------- Music ---------- */
-  const audio = $("#bgm"), mBtn = $("#musicBtn");
-  if (W.music) {
-    audio.src = W.music;
-    mBtn.hidden = false;
-    mBtn.addEventListener("click", () => (audio.paused ? audio.play() : audio.pause()));
-    audio.addEventListener("play", () => mBtn.classList.add("playing"));
-    audio.addEventListener("pause", () => mBtn.classList.remove("playing"));
+  /* ---------- Music (YouTube or own file) ---------- */
+  const S = W.song || {};
+  const jb = $("#jukebox"), audio = $("#bgm");
+  let yt = null, ytReady = false, wantPlay = false, playing = false;
+  const setPlaying = (v) => {
+    playing = v;
+    jb.classList.toggle("playing", v);
+    jb.classList.remove("nudge");
+    document.body.classList.toggle("beat", v && !reduced);
+  };
+  const music = {
+    play() {
+      wantPlay = true;
+      if (S.file) audio.play().catch(() => jb.classList.add("nudge"));
+      else if (ytReady) yt.playVideo();
+      setTimeout(() => { if (wantPlay && !playing) jb.classList.add("nudge"); }, 2500);
+    },
+    pause() {
+      wantPlay = false;
+      if (S.file) audio.pause();
+      else if (ytReady) yt.pauseVideo();
+    },
+    toggle() { playing ? this.pause() : this.play(); }
+  };
+  if (S.youtubeId || S.file) {
+    jb.hidden = false;
+    $("#npTitle").textContent = S.title || "Our song";
+    $("#npArtist").textContent = S.artist || "";
+    document.documentElement.style.setProperty("--beat", `${60 / (S.bpm || 120)}s`);
+    $("#vinylBtn").addEventListener("click", () => music.toggle());
+    $("#npExpand").addEventListener("click", () => jb.classList.toggle("expanded"));
+    if (S.file) {
+      audio.src = S.file;
+      audio.addEventListener("play", () => setPlaying(true));
+      audio.addEventListener("pause", () => setPlaying(false));
+    } else {
+      window.onYouTubeIframeAPIReady = () => {
+        yt = new YT.Player("ytHost", {
+          width: 240, height: 135, videoId: S.youtubeId,
+          playerVars: { playsinline: 1, loop: 1, playlist: S.youtubeId, rel: 0, modestbranding: 1 },
+          events: {
+            onReady: () => { ytReady = true; yt.setVolume(75); if (wantPlay) yt.playVideo(); },
+            onStateChange: (e) => {
+              if (e.data === YT.PlayerState.PLAYING) setPlaying(true);
+              else if (e.data === YT.PlayerState.PAUSED || e.data === YT.PlayerState.ENDED) setPlaying(false);
+            },
+            onError: () => { jb.hidden = true; }
+          }
+        });
+      };
+      const s = document.createElement("script");
+      s.src = "https://www.youtube.com/iframe_api";
+      document.head.appendChild(s);
+    }
+  }
+
+  /* ---------- Marquee ---------- */
+  const fmtShort = (d) => fmt(d, { day: "2-digit", month: "2-digit", year: "numeric" }).replace(/\//g, " · ");
+  const city = (ev) => (ev.address || "").split(",").pop().trim();
+  const line1 = ["Save the date", fmtShort(wDate), "Guruvayur", `${W.groom.name} & ${W.bride.name}`];
+  const line2 = W.events.filter((e) => e.date).map((e) => `${e.name.split("·")[0].trim()} · ${city(e)} · ${fmt(new Date(e.date), { day: "numeric", month: "short" })}`);
+  const fill = (el, items) => {
+    const chunk = items.map((t) => `<span>${t}</span><b>✦</b>`).join("");
+    el.innerHTML = chunk.repeat(4) + chunk.repeat(4);
+  };
+  fill($("#mq1"), line1);
+  fill($("#mq2"), line2);
+
+  /* ---------- Hero names: split letters ---------- */
+  $$("#heroNames .script-name").forEach((el) => {
+    el.innerHTML = [...el.textContent].map((c, i) => `<span class="ch" style="--i:${i}">${c === " " ? "&nbsp;" : c}</span>`).join("");
+  });
+
+  /* ---------- Scroll progress + hero tilt ---------- */
+  const bar = $("#progressBar");
+  addEventListener("scroll", () => {
+    const h = document.documentElement.scrollHeight - innerHeight;
+    bar.style.transform = `scaleX(${h > 0 ? scrollY / h : 0})`;
+  }, { passive: true });
+  const heroContent = $(".hero-content");
+  if (matchMedia("(pointer: fine)").matches && !reduced) {
+    $("#home").addEventListener("pointermove", (e) => {
+      const x = e.clientX / innerWidth - .5, y = e.clientY / innerHeight - .5;
+      heroContent.style.transform = `perspective(900px) rotateY(${x * 8}deg) rotateX(${-y * 8}deg)`;
+    });
+    $("#home").addEventListener("pointerleave", () => (heroContent.style.transform = ""));
   }
 
   /* ---------- Section dots ---------- */
@@ -249,31 +327,61 @@
   }), { threshold: 0.15 });
   $$(".reveal").forEach((el) => io.observe(el));
 
-  /* ---------- Petals (marigold, jasmine, rose) ---------- */
+  /* ---------- Canvas: petals, fireworks, sparkles ---------- */
   const cv = $("#petals"), ctx = cv.getContext("2d");
   const colors = ["#f4a62a", "#f7c34a", "#fffaf0", "#fff3e0", "#d9475b", "#e98a3a"];
-  let P = [], dpr = 1, ambient = false;
+  const fwColors = ["#c9952a", "#e0ae3c", "#d94a64", "#b3263c", "#f08a24", "#a8761c"];
+  let P = [], R = [], K = [], dpr = 1, ambient = false;
+  const rnd = (a, b) => a + Math.random() * (b - a);
+  const pick = (arr) => arr[(Math.random() * arr.length) | 0];
   const size = () => {
     dpr = Math.min(devicePixelRatio || 1, 2);
     cv.width = innerWidth * dpr; cv.height = innerHeight * dpr;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   };
   size(); addEventListener("resize", size);
+
   const mk = (x, y, burstMode) => ({
     x, y,
-    vx: burstMode ? (Math.random() - .5) * 9 : (Math.random() - .5) * .6,
-    vy: burstMode ? -Math.random() * 9 - 2 : Math.random() * 1 + .6,
-    r: burstMode ? Math.random() * 6 + 5 : Math.random() * 4 + 4,
-    a: Math.random() * Math.PI * 2,
-    va: (Math.random() - .5) * .08,
-    sw: Math.random() * Math.PI * 2,
-    c: colors[(Math.random() * colors.length) | 0],
-    burst: burstMode
+    vx: burstMode ? rnd(-4.5, 4.5) : rnd(-.3, .3),
+    vy: burstMode ? -rnd(2, 11) : rnd(.6, 1.6),
+    r: burstMode ? rnd(5, 11) : rnd(4, 8),
+    a: rnd(0, 6.3), va: rnd(-.04, .04), sw: rnd(0, 6.3),
+    c: pick(colors), burst: burstMode
   });
   function burst(x, y, n) { if (reduced) return; for (let i = 0; i < n; i++) P.push(mk(x, y, true)); }
+
+  function explode(x, y, c, heart) {
+    const n = heart ? 90 : 70;
+    for (let i = 0; i < n; i++) {
+      let vx, vy;
+      if (heart) {
+        const t = (i / n) * Math.PI * 2, s = rnd(.22, .26);
+        vx = 16 * Math.sin(t) ** 3 * s;
+        vy = -(13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t)) * s;
+      } else {
+        const a = (i / n) * Math.PI * 2, sp = rnd(1.5, 5.5);
+        vx = Math.cos(a) * sp; vy = Math.sin(a) * sp;
+      }
+      K.push({ x, y, vx, vy, life: 1, decay: rnd(.009, .016), c: Math.random() < .25 ? "#e9c46a" : c, r: rnd(1.4, 2.6), g: heart ? .025 : .05 });
+    }
+  }
+  function firework(x, y, heart) {
+    if (reduced) return;
+    const tx = x ?? innerWidth * rnd(.15, .85), ty = y ?? innerHeight * rnd(.12, .4);
+    R.push({ x: tx + rnd(-60, 60), y: innerHeight + 10, tx, ty, c: pick(fwColors), heart });
+  }
+  function volley(n, gap = 260, heartFirst = false) {
+    for (let i = 0; i < n; i++) setTimeout(() => firework(undefined, undefined, heartFirst && i === 0), i * gap);
+  }
+  function sparkle(x, y, n = 1, spread = 1.2) {
+    for (let i = 0; i < n; i++)
+      K.push({ x, y, vx: rnd(-spread, spread), vy: rnd(-spread, spread * .5), life: .9, decay: rnd(.025, .045), c: pick(["#d4a537", "#e9c46a", "#c9952a"]), r: rnd(.8, 2), g: .03 });
+  }
+
   const draw = () => {
     ctx.clearRect(0, 0, innerWidth, innerHeight);
-    if (ambient && P.length < 12 && Math.random() < .02) P.push(mk(Math.random() * innerWidth, -20, false));
+    if (ambient && P.length < 12 && Math.random() < .02) P.push(mk(rnd(0, innerWidth), -20, false));
     P = P.filter((p) => p.y < innerHeight + 30);
     for (const p of P) {
       p.sw += .03; p.vy = Math.min(p.vy + .12, 2.2); p.vx *= .985;
@@ -283,20 +391,74 @@
       ctx.beginPath(); ctx.ellipse(0, 0, p.r, p.r * .55, 0, 0, Math.PI * 2); ctx.fill();
       ctx.restore();
     }
+        R = R.filter((r) => {
+      const dy = r.ty - r.y;
+      r.y += Math.max(dy * .06, -14) - 2; r.x += (r.tx - r.x) * .06;
+      ctx.globalAlpha = 1; ctx.fillStyle = "#c9952a";
+      ctx.beginPath(); ctx.arc(r.x, r.y, 2.4, 0, 7); ctx.fill();
+      sparkle(r.x, r.y + 4, 1, .4);
+      if (r.y <= r.ty + 4) { explode(r.x, r.y, r.c, r.heart); return false; }
+      return true;
+    });
+    K = K.filter((k) => k.life > 0);
+    for (const k of K) {
+      k.vx *= .975; k.vy = k.vy * .975 + k.g; k.x += k.vx; k.y += k.vy; k.life -= k.decay;
+      ctx.globalAlpha = Math.max(k.life, 0); ctx.fillStyle = k.c;
+      ctx.beginPath(); ctx.arc(k.x, k.y, k.r * (k.life + .3), 0, 7); ctx.fill();
+    }
+    ctx.globalAlpha = 1;
     requestAnimationFrame(draw);
   };
   if (!reduced) requestAnimationFrame(draw);
 
+  // Sparkle trail (mouse) and tap hearts (touch/click on empty space)
+  if (!reduced) {
+    let last = 0;
+    addEventListener("pointermove", (e) => {
+      if (e.pointerType !== "mouse") return;
+      const t = performance.now();
+      if (t - last > 40) { sparkle(e.clientX, e.clientY, 1, .6); last = t; }
+    }, { passive: true });
+    addEventListener("pointerdown", (e) => {
+      if (e.target.closest("a, button, input, textarea, label, .jukebox, #gate")) return;
+      sparkle(e.clientX, e.clientY, 14, 2.2);
+    });
+  }
+
+  // Easter egg: tap the names three times
+  let taps = [];
+  $("#heroNames").addEventListener("click", () => {
+    const now2 = Date.now();
+    taps = taps.filter((t) => now2 - t < 1500).concat(now2);
+    if (taps.length >= 3) { taps = []; volley(6, 200); }
+  });
+  const celebrate = $("#celebrateBtn");
+  if (celebrate) celebrate.addEventListener("click", () => { volley(10, 200); burst(innerWidth / 2, innerHeight, 60); });
+
+  // When the countdown scrolls into view the first time, pop a couple of fireworks
+  const cdObs = new IntersectionObserver((ents) => ents.forEach((en) => {
+    if (en.isIntersecting && document.body.classList.contains("opened")) { volley(3, 300); cdObs.disconnect(); }
+  }), { threshold: .5 });
+  cdObs.observe($("#countdown"));
+
   /* ---------- Opening gate ---------- */
   const gate = $("#gate");
+  $("#skipIntro").addEventListener("click", () => gate.classList.add("skipped"));
   $("#openBtn").addEventListener("click", () => {
+    music.play();
     gate.classList.add("open");
     document.body.classList.remove("locked");
+    document.body.classList.add("opened");
     burst(innerWidth / 2, innerHeight / 2, 140);
+    setTimeout(() => volley(7, 280, true), 500);
     setTimeout(() => (ambient = true), 1200);
-    if (W.music) audio.play().catch(() => {});
     setTimeout(() => gate.classList.add("gone"), 1700);
   });
-  // Let people skip the gate on revisits via #home etc.
-  if (location.hash && location.hash !== "#home") $("#openBtn").click();
+  // Let people skip the gate when linked straight to a section
+  if (location.hash && location.hash !== "#home") {
+    gate.classList.add("open", "gone");
+    document.body.classList.remove("locked");
+    document.body.classList.add("opened");
+    ambient = true;
+  }
 })();

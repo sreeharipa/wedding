@@ -6,7 +6,7 @@ A Kerala-style wedding invitation site: opening gate with wax seal, falling flow
 Everything lives in **`config.js`**: names, dates, venues, events, families, photos, WhatsApp number and music.
 
 - Photos: drop images in a `photos/` folder and list them in `gallery`, e.g. `"photos/1.jpg"`.
-- Music: add an mp3 (e.g. `music/song.mp3`) and set `music`.
+- Music: set `song.youtubeId` to any embeddable YouTube video, or `song.file` to your own mp3.
 - RSVP: set `rsvpWhatsApp` to your number with country code, digits only (`91XXXXXXXXXX`).
 
 ## Run locally
