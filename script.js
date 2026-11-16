@@ -59,8 +59,13 @@
   };
   $("#mainCal").addEventListener("click", () => addToCal(mainEvent));
 
+  /* ---------- Notes ---------- */
+  const notesEl = $("#notes");
+  if (W.notes && W.notes.length) notesEl.innerHTML = W.notes.map((n) => `<li>${n}</li>`).join("");
+  else notesEl.hidden = true;
+
   /* ---------- Story ---------- */
-  if (!W.story || !W.story.length) $("#story").remove();
+  if (!W.story || !W.story.length) $("#story").outerHTML = "";
   else $("#timeline").innerHTML = W.story.map((s) => `
     <div class="tl-item reveal">
       <div class="tl-year">${s.year}</div>
@@ -76,25 +81,28 @@
   };
   const now = Date.now();
   $("#eventList").innerHTML = W.events.map((ev, i) => {
-    const d = new Date(ev.date);
-    const past = d.getTime() + (ev.durationHours || 2) * 36e5 < now;
+    const d = ev.date ? new Date(ev.date) : null;
+    const past = d && d.getTime() + (ev.durationHours || 2) * 36e5 < now;
+    const when = ev.timeText || (d ? fmt(d, { hour: "numeric", minute: "2-digit", hour12: true }) : "Time to be announced");
     return `
     <article class="event reveal ${ev.highlight ? "highlight" : ""} ${past ? "past" : ""}" style="transition-delay:${i * 90}ms">
       ${ev.highlight ? '<span class="ev-badge">Main event</span>' : ""}
       <div class="ev-date">
-        <span class="ev-day">${fmt(d, { day: "2-digit" })}</span>
-        <span class="ev-month">${fmt(d, { month: "short" })} · ${fmt(d, { weekday: "short" })}</span>
+        ${d
+          ? `<span class="ev-day">${fmt(d, { day: "2-digit" })}</span>
+             <span class="ev-month">${fmt(d, { month: "short" })} · ${fmt(d, { weekday: "short" })}</span>`
+          : `<span class="ev-day tba">Soon</span><span class="ev-month">Date to be announced</span>`}
       </div>
       <h4 class="ev-name">${ev.name}</h4>
       ${ev.malayalam ? `<p class="ev-mal">${ev.malayalam}</p>` : ""}
       <ul class="ev-meta">
-        <li>${icon.clock}<span>${fmt(d, { hour: "numeric", minute: "2-digit", hour12: true })}</span></li>
+        <li>${icon.clock}<span>${when}</span></li>
         <li>${icon.pin}<span>${ev.venue}${ev.address ? `<br/><small>${ev.address}</small>` : ""}</span></li>
         ${ev.dress ? `<li>${icon.dress}<span>${ev.dress}</span></li>` : ""}
       </ul>
       <div class="ev-actions">
         ${ev.mapUrl ? `<a class="btn small" href="${ev.mapUrl}" target="_blank" rel="noopener">Directions</a>` : ""}
-        <button class="btn small ghost" data-cal="${i}">Save date</button>
+        ${d ? `<button class="btn small ghost" data-cal="${i}">Save date</button>` : ""}
       </div>
     </article>`;
   }).join("");
