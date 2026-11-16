@@ -268,7 +268,10 @@
   /* ---------- Music (YouTube or own file) ---------- */
   const S = W.song || {};
   const jb = $("#jukebox"), audio = $("#bgm");
-  let yt = null, ytReady = false, wantPlay = false, playing = false;
+  let yt = null, ytReady = false, wantPlay = false, playing = false, warming = false;
+  // The Open button waits until the player is ready, so the tap itself starts the song
+  const openBtn = $("#openBtn");
+  const armOpen = () => { openBtn.disabled = false; openBtn.classList.remove("loading"); openBtn.textContent = "Open invitation"; };
   const setPlaying = (v) => {
     playing = v;
     jb.classList.toggle("playing", v);
@@ -279,7 +282,7 @@
     play() {
       wantPlay = true;
       if (S.file) audio.play().catch(() => jb.classList.add("nudge"));
-      else if (ytReady) yt.playVideo();
+      else if (ytReady) { yt.unMute(); yt.setVolume(75); yt.playVideo(); }
       setTimeout(() => { if (wantPlay && !playing) jb.classList.add("nudge"); }, 2500);
     },
     pause() {
@@ -306,14 +309,27 @@
       audio.addEventListener("play", () => setPlaying(true));
       audio.addEventListener("pause", () => setPlaying(false));
     } else {
+      openBtn.disabled = true; openBtn.classList.add("loading"); openBtn.textContent = "Getting ready…";
+      setTimeout(armOpen, 6000); // never keep guests waiting on a slow connection
       window.onYouTubeIframeAPIReady = () => {
         yt = new YT.Player("ytHost", {
           width: 240, height: 135, videoId: S.youtubeId,
           playerVars: { playsinline: 1, rel: 0, modestbranding: 1, start: S.start || 0 },
           events: {
-            onReady: () => { ytReady = true; yt.setVolume(75); if (wantPlay) yt.playVideo(); },
+            onReady: () => {
+              ytReady = true; armOpen();
+              if (wantPlay) { yt.unMute(); yt.setVolume(75); yt.playVideo(); return; }
+              // Pre-buffer silently so the song starts the instant guests tap Open
+              warming = true; yt.mute(); yt.playVideo();
+              setTimeout(() => { if (warming && !wantPlay) { warming = false; yt.pauseVideo(); } }, 4000);
+            },
             onStateChange: (e) => {
-              if (e.data === YT.PlayerState.PLAYING) setPlaying(true);
+              if (warming && e.data === YT.PlayerState.PLAYING) {
+                warming = false;
+                if (!wantPlay) { yt.pauseVideo(); yt.seekTo(S.start || 0, true); return; }
+                yt.unMute(); yt.setVolume(75);
+              }
+              if (e.data === YT.PlayerState.PLAYING) setPlaying(wantPlay);
               else if (e.data === YT.PlayerState.ENDED && wantPlay) { yt.seekTo(S.start || 0, true); yt.playVideo(); }
               else if (e.data === YT.PlayerState.PAUSED || e.data === YT.PlayerState.ENDED) setPlaying(false);
             },

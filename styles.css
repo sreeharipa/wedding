@@ -733,3 +733,6 @@ html, body { overflow-anchor: none; }
   }
   #iPhoto.show { transform: translateX(-50%) rotate(var(--tilt, -3deg)); }
 }
+
+/* Open button while the music player loads */
+#gate .go.loading { opacity: .6; animation: none; cursor: progress; }
