@@ -32,7 +32,7 @@ window.WEDDING = {
     groom: {
       father: "Mr. N Prasanna Kumar",
       mother: "Mrs. Ajitha P Kumar",
-      place: "Panchajanyam, Muthupilakadu West, Kunnathur, Kollam"
+      place: "Panchajanyam, Muthupilakadu West, Kollam"
     },
     bride: {
       father: "Mr. P S Jayakumar",
@@ -55,7 +55,7 @@ window.WEDDING = {
       highlight: true
     },
     {
-      name: "Wedding Ceremony",
+      name: "Wedding Celebration",
       malayalam: "വിവാഹം",
       date: "2026-12-23T10:30:00+05:30",
       timeText: "10:30 – 11:00 AM",
@@ -66,12 +66,13 @@ window.WEDDING = {
     },
     {
       name: "Reception · Kollam",
-      malayalam: "സ്വീകരണം · കൊല്ലം",
-      date: "",
+      malayalam: "വിവാഹ സൽക്കാരം · കൊല്ലം",
+      date: "2026-12-25T17:00:00+05:30",
+      timeText: "5:00 – 9:00 PM",
       durationHours: 4,
-      venue: "Panchajanyam (Groom's Residence)",
-      address: "Muthupilakadu West, Kunnathur, Kollam",
-      mapUrl: "https://maps.google.com/?q=Muthupilakadu+West+Kunnathur+Kollam"
+      venue: "NJ Convention Centre",
+      address: "Cinemaparambu, Poruvazhy P.O., Kollam",
+      mapUrl: "https://maps.google.com/?q=NJ+Convention+Centre+Cinemaparambu+Poruvazhy"
     },
     {
       name: "Reception · Thiruvananthapuram",
