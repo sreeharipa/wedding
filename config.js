@@ -97,12 +97,12 @@ window.WEDDING = {
   // Background music. youtubeId plays from YouTube (no file hosting needed).
   // Or set file: "music/song.mp3" to use your own audio file instead.
   song: {
-    youtubeId: "xWggTb45brM",
+    youtubeId: "O511E3MI7Ew",
     file: "",
-    title: "Toosie Slide",
-    artist: "Drake",
-    start: 41, // seconds into the video to start (and loop back to)
-    bpm: 81
+    title: "Neela Shalabhame",
+    artist: "",
+    start: 0, // seconds into the video to start (and loop back to)
+    bpm: 90
   },
 
   hashtag: "#SreehariWedsAkshaya"
