@@ -339,14 +339,6 @@
     const h = document.documentElement.scrollHeight - innerHeight;
     bar.style.transform = `scaleX(${h > 0 ? scrollY / h : 0})`;
   }, { passive: true });
-  const heroContent = $(".hero-content");
-  if (matchMedia("(pointer: fine)").matches && !reduced) {
-    $("#home").addEventListener("pointermove", (e) => {
-      const x = e.clientX / innerWidth - .5, y = e.clientY / innerHeight - .5;
-      heroContent.style.transform = `perspective(900px) rotateY(${x * 8}deg) rotateX(${-y * 8}deg)`;
-    });
-    $("#home").addEventListener("pointerleave", () => (heroContent.style.transform = ""));
-  }
 
   /* ---------- Section dots ---------- */
   const sections = $$("main section[data-label]");

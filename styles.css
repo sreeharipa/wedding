@@ -534,7 +534,7 @@ body.opened .jukebox { opacity: 1; translate: 0 0; transition-delay: 1.4s; }
           mask: radial-gradient(circle, #000, transparent 55%);
   animation: spin 200s linear infinite reverse;
 }
-.hero-content { transition: transform .4s ease-out; transform-style: preserve-3d; }
+
 .script-name { background: none; -webkit-background-clip: initial; background-clip: initial; color: inherit; animation: none; }
 .script-name .ch {
   display: inline-block;
