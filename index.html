@@ -8,10 +8,13 @@
   <meta property="og:title" content="You're invited to our wedding" />
   <meta property="og:description" content="Join us as two hearts become one." />
   <meta name="theme-color" content="#14281f" />
+  <meta property="og:image" content="https://sreeharipa.github.io/wedding/photos/hero-sm.jpg" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🪔</text></svg>" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Pinyon+Script&family=Manrope:wght@400;500;600;700&family=Noto+Serif+Malayalam:wght@400;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Pinyon+Script&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body class="locked">
@@ -28,7 +31,7 @@
     <div class="gate-center">
       <p class="eyebrow gold">You are cordially invited</p>
       <h1 class="gate-names"><span data-bind="groom.name"></span><span class="amp">&amp;</span><span data-bind="bride.name"></span></h1>
-      <p class="mal" data-bind="titleMalayalam"></p>
+      <p class="gate-tag" data-bind="titleEnglish"></p>
       <button id="openBtn" class="seal" aria-label="Open the invitation">
         <span class="seal-ring"></span>
         <span class="seal-text">Open</span>
@@ -71,6 +74,11 @@
     <section id="home" class="hero" data-label="Home">
       <div class="hero-bg"><div class="rays"></div><div class="mandala spin"></div></div>
       <div class="kasavu top"></div>
+      <div class="hero-grid">
+      <figure class="hero-portrait" id="heroPortrait">
+        <div class="arch-frame"><img id="heroImg" alt="Sreehari and Akshaya" /></div>
+        <span class="arch-glow" aria-hidden="true"></span>
+      </figure>
       <div class="hero-content">
         <svg class="lamp" viewBox="0 0 120 200" aria-hidden="true">
           <defs>
@@ -94,7 +102,6 @@
           <span class="weds">weds</span>
           <span class="script-name" data-bind="bride.name"></span>
         </h2>
-        <p class="mal big" data-bind="titleMalayalam"></p>
         <p class="tagline" data-bind="titleEnglish"></p>
         <div class="date-band">
           <span id="heroDay"></span>
@@ -104,6 +111,7 @@
           <span id="heroYear"></span>
         </div>
         <a href="#invite" class="scroll-cue"><span>Scroll</span><i></i></a>
+      </div>
       </div>
     </section>
 
@@ -136,7 +144,7 @@
             </g>
           </svg>
         </div>
-        <p class="eyebrow reveal">ശുഭമുഹൂർത്തം</p>
+        <p class="eyebrow reveal">An auspicious beginning</p>
         <h3 class="section-title reveal">The Invitation</h3>
         <p class="lead reveal" data-bind="invitationMessage"></p>
 
@@ -180,6 +188,23 @@
       <div class="kasavu bottom"></div>
     </section>
 
+    <!-- ============ FILM ============ -->
+    <section id="film" class="section paper" data-label="Film">
+      <div class="container">
+        <div class="center">
+          <p class="eyebrow reveal">Press play</p>
+          <h3 class="section-title reveal" id="filmTitle">Our Engagement Film</h3>
+        </div>
+        <div class="film reveal" id="film-frame">
+          <button class="film-poster" id="filmPlay" aria-label="Play the engagement film">
+            <img id="filmPoster" alt="" loading="lazy" />
+            <span class="film-play"><svg viewBox="0 0 24 24" width="30" height="30"><path fill="currentColor" d="M8 5v14l11-7z"/></svg></span>
+            <span class="film-cap">Watch the film</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
     <!-- ============ STORY ============ -->
     <section id="story" class="section paper" data-label="Our Story">
       <div class="container">
@@ -194,7 +219,7 @@
     <!-- ============ FAMILY ============ -->
     <section id="family" class="section cream" data-label="Family">
       <div class="container center">
-        <p class="mal reveal">മാതാപിതാക്കളുടെ അനുഗ്രഹാശിസ്സുകളോടെ</p>
+        <p class="eyebrow reveal">With love and blessings</p>
         <h3 class="section-title reveal">With the Blessings of Our Parents</h3>
         <div class="family-grid">
           <div class="family-card reveal">
@@ -287,7 +312,7 @@
 
   <footer class="footer">
     <div class="kasavu top"></div>
-    <p class="mal">നന്ദി</p>
+    <p class="footer-thanks">Thank you</p>
     <p class="footer-names"><span data-bind="groom.name"></span> &amp; <span data-bind="bride.name"></span></p>
     <p class="muted" id="footerDate"></p>
     <p class="muted small">Made with love · <span data-bind="hashtag"></span></p>

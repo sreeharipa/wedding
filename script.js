@@ -59,6 +59,23 @@
   };
   $("#mainCal").addEventListener("click", () => addToCal(mainEvent));
 
+  /* ---------- Hero portrait ---------- */
+  if (W.heroPhoto) $("#heroImg").src = W.heroPhoto;
+  else $("#heroPortrait").remove();
+
+  /* ---------- Film (Google Drive embed, loads on click) ---------- */
+  const V = W.video;
+  if (!V || !V.driveId) $("#film").outerHTML = "";
+  else {
+    $("#filmTitle").textContent = V.title || "Our Film";
+    if (V.poster) $("#filmPoster").src = V.poster;
+    $("#filmPlay").addEventListener("click", () => {
+      window.__pauseMusic && window.__pauseMusic();
+      $("#film-frame").innerHTML =
+        `<iframe src="https://drive.google.com/file/d/${V.driveId}/preview" allow="autoplay; fullscreen" allowfullscreen title="${V.title || "Film"}"></iframe>`;
+    });
+  }
+
   /* ---------- Notes ---------- */
   const notesEl = $("#notes");
   if (W.notes && W.notes.length) notesEl.innerHTML = W.notes.map((n) => `<li>${n}</li>`).join("");
@@ -94,7 +111,6 @@
           : `<span class="ev-day tba">Soon</span><span class="ev-month">Date to be announced</span>`}
       </div>
       <h4 class="ev-name">${ev.name}</h4>
-      ${ev.malayalam ? `<p class="ev-mal">${ev.malayalam}</p>` : ""}
       <ul class="ev-meta">
         <li>${icon.clock}<span>${when}</span></li>
         <li>${icon.pin}<span>${ev.venue}${ev.address ? `<br/><small>${ev.address}</small>` : ""}</span></li>
@@ -111,7 +127,7 @@
   /* ---------- Gallery ---------- */
   const grid = $("#galleryGrid");
   if (W.gallery && W.gallery.length) {
-    grid.innerHTML = W.gallery.map((src) => `<figure class="reveal"><img src="${src}" loading="lazy" alt="Photo of the couple"/></figure>`).join("");
+    grid.innerHTML = W.gallery.map((src, i) => `<figure class="reveal" style="transition-delay:${(i % 3) * 120}ms"><img src="${src}" loading="lazy" alt="Sreehari and Akshaya"/></figure>`).join("");
     const lb = $("#lightbox");
     grid.addEventListener("click", (e) => {
       const img = e.target.closest("img");
@@ -248,6 +264,7 @@
     },
     toggle() { playing ? this.pause() : this.play(); }
   };
+  window.__pauseMusic = () => music.pause();
   if (S.youtubeId || S.file) {
     jb.hidden = false;
     $("#npTitle").textContent = S.title || "Our song";

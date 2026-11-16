@@ -6,9 +6,10 @@ window.WEDDING = {
   groom: { name: "Sreehari", full: "Sreehari" },
   bride: { name: "Akshaya", full: "Dr Akshaya" },
 
-  // Malayalam title shown under the names
-  titleMalayalam: "ഒന്നാകുന്ന രണ്ടു ഹൃദയങ്ങൾ",
   titleEnglish: "Two hearts, one journey",
+
+  // Portrait shown beside the names on the first screen
+  heroPhoto: "photos/1.jpg",
 
   // Main ceremony (countdown target)
   date: "2026-12-23T08:00:00+05:30",
@@ -45,7 +46,6 @@ window.WEDDING = {
   events: [
     {
       name: "Thalikettu",
-      malayalam: "താലികെട്ട്",
       date: "2026-12-23T08:00:00+05:30",
       timeText: "Muhurtham 8:00 – 9:00 AM",
       durationHours: 1,
@@ -56,7 +56,6 @@ window.WEDDING = {
     },
     {
       name: "Wedding Celebration",
-      malayalam: "വിവാഹം",
       date: "2026-12-23T10:30:00+05:30",
       timeText: "10:30 – 11:00 AM",
       durationHours: 0.5,
@@ -66,7 +65,6 @@ window.WEDDING = {
     },
     {
       name: "Reception · Kollam",
-      malayalam: "വിവാഹ സൽക്കാരം · കൊല്ലം",
       date: "2026-12-25T17:00:00+05:30",
       timeText: "5:00 – 9:00 PM",
       durationHours: 4,
@@ -76,7 +74,6 @@ window.WEDDING = {
     },
     {
       name: "Reception · Thiruvananthapuram",
-      malayalam: "സ്വീകരണം · തിരുവനന്തപുരം",
       date: "2026-12-26T17:00:00+05:30",
       timeText: "5:00 – 8:30 PM",
       durationHours: 3.5,
@@ -87,7 +84,17 @@ window.WEDDING = {
   ],
 
   // Photo URLs or paths like "photos/1.jpg" (leave [] to show decorative frames)
-  gallery: [],
+  gallery: [
+    "photos/2.jpg", "photos/6.jpg", "photos/3.jpg", "photos/5.jpg",
+    "photos/4.jpg", "photos/7.jpg", "photos/1.jpg", "photos/8.jpg"
+  ],
+
+  // Engagement film from Google Drive (file must be shared "Anyone with the link")
+  video: {
+    driveId: "1g_Paed22WMXs10EDGcfQVfbfINohDRvC",
+    poster: "photos/5.jpg",
+    title: "Our Engagement Film"
+  },
 
   // RSVP goes to WhatsApp. Country code + number, digits only, e.g. "919876543210"
   rsvpWhatsApp: "919647921150",
@@ -96,11 +103,11 @@ window.WEDDING = {
   // Background music. youtubeId plays from YouTube (no file hosting needed).
   // Or set file: "music/song.mp3" to use your own audio file instead.
   song: {
-    youtubeId: "dElRVQFqj-k",
+    youtubeId: "RsY1uHr3Ztc",
     file: "",
-    title: "Marry You",
-    artist: "Bruno Mars",
-    bpm: 145
+    title: "Walk of the Bride",
+    artist: "Agam",
+    bpm: 96
   },
 
   hashtag: "#SreehariWedsAkshaya"
