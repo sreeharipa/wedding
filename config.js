@@ -107,7 +107,7 @@ window.WEDDING = {
     file: "",
     title: "Toosie Slide",
     artist: "Drake",
-    start: 40, // seconds into the video to start (and loop back to)
+    start: 41, // seconds into the video to start (and loop back to)
     bpm: 81
   },
 
