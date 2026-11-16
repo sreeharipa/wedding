@@ -275,17 +275,21 @@
     $("#npExpand").addEventListener("click", () => jb.classList.toggle("expanded"));
     if (S.file) {
       audio.src = S.file;
+      audio.loop = false;
+      audio.addEventListener("loadedmetadata", () => { if (S.start) audio.currentTime = S.start; }, { once: true });
+      audio.addEventListener("ended", () => { audio.currentTime = S.start || 0; audio.play(); });
       audio.addEventListener("play", () => setPlaying(true));
       audio.addEventListener("pause", () => setPlaying(false));
     } else {
       window.onYouTubeIframeAPIReady = () => {
         yt = new YT.Player("ytHost", {
           width: 240, height: 135, videoId: S.youtubeId,
-          playerVars: { playsinline: 1, loop: 1, playlist: S.youtubeId, rel: 0, modestbranding: 1 },
+          playerVars: { playsinline: 1, rel: 0, modestbranding: 1, start: S.start || 0 },
           events: {
             onReady: () => { ytReady = true; yt.setVolume(75); if (wantPlay) yt.playVideo(); },
             onStateChange: (e) => {
               if (e.data === YT.PlayerState.PLAYING) setPlaying(true);
+              else if (e.data === YT.PlayerState.ENDED && wantPlay) { yt.seekTo(S.start || 0, true); yt.playVideo(); }
               else if (e.data === YT.PlayerState.PAUSED || e.data === YT.PlayerState.ENDED) setPlaying(false);
             },
             onError: () => { jb.hidden = true; }
