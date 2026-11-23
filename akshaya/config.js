@@ -121,7 +121,11 @@ window.WEDDING = {
     title: "Our Engagement Film"
   },
 
-  // RSVP goes to WhatsApp. Country code + number, digits only, e.g. "919876543210"
+  // RSVPs are saved as rows in a Google Sheet: paste the Apps Script web app URL (ends in /exec).
+  // See rsvp-sheet.gs for the one-time setup. If this is empty, RSVPs fall back to WhatsApp.
+  rsvpSheetUrl: "",
+  rsvpSide: "Bride's side",
+  // WhatsApp fallback. Country code + number, digits only, e.g. "919876543210"
   rsvpWhatsApp: "919647921150",
   rsvpDeadline: "",
 

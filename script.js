@@ -217,7 +217,7 @@
   const timer = setInterval(tick, 1000);
   tick();
 
-  /* ---------- RSVP via WhatsApp ---------- */
+  /* ---------- RSVP → Google Sheet (WhatsApp fallback) ---------- */
   const form = $("#rsvpForm");
   $("#rsvpNote").textContent = W.rsvpDeadline ? `Please respond by ${W.rsvpDeadline}` : "";
   const guests = form.guests;
@@ -240,7 +240,9 @@
   };
   $$("input[name=attend]", form).forEach((r) => r.addEventListener("change", syncAttend));
   picks.addEventListener("change", () => picks.classList.remove("err"));
-  form.addEventListener("submit", (e) => {
+  const sendBtn = $("button[type=submit]", form);
+  let sending = false;
+  form.addEventListener("submit", async (e) => {
     e.preventDefault();
     const name = form.name.value.trim();
     if (!name) { form.name.classList.add("err"); form.name.focus(); return; }
@@ -251,11 +253,38 @@
     const msg = [
       `🪔 *RSVP — ${couple}*`,
       `Name: ${name}`,
+      form.phone.value.trim() ? `Phone: ${form.phone.value.trim()}` : "",
       `Response: ${form.attend.value}${yes ? ` (${guests.value} guest${guests.value > 1 ? "s" : ""})` : ""}`,
       yes ? `Attending:\n${chosen.map((ev) => `• ${ev.name}`).join("\n")}` : "",
       form.wish.value.trim() ? `Wishes: ${form.wish.value.trim()}` : ""
     ].filter(Boolean).join("\n");
-    if (W.rsvpWhatsApp) {
+    if (sending) return;
+    if (W.rsvpSheetUrl) {
+      sending = true;
+      sendBtn.disabled = true;
+      const label = sendBtn.textContent;
+      sendBtn.textContent = "Sending…";
+      const body = new URLSearchParams({
+        site: W.rsvpSide || location.pathname,
+        name,
+        phone: form.phone.value.trim(),
+        response: yes ? "Attending" : "Not attending",
+        guests: yes ? String(guests.value) : "0",
+        events: yes ? chosen.map((ev) => ev.name).join(", ") : "",
+        wishes: form.wish.value.trim()
+      });
+      let ok = true;
+      try {
+        // Apps Script doesn't send CORS headers, so the reply can't be read; a network error still throws.
+        await fetch(W.rsvpSheetUrl, { method: "POST", mode: "no-cors", body });
+      } catch (err) {
+        ok = false;
+      }
+      sending = false;
+      sendBtn.disabled = false;
+      sendBtn.textContent = label;
+      if (!ok) { toast("Couldn't send. Please check your connection and try again."); return; }
+    } else if (W.rsvpWhatsApp) {
       window.open(`https://wa.me/${W.rsvpWhatsApp}?text=${encodeURIComponent(msg)}`, "_blank", "noopener");
     } else {
       navigator.clipboard?.writeText(msg).catch(() => {});
