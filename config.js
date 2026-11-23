@@ -6,7 +6,7 @@ window.WEDDING = {
   groom: { name: "Sreehari", full: "Sreehari" },
   bride: { name: "Akshaya", full: "Dr Akshaya" },
 
-  titleEnglish: "Guruvayur, Kerala",
+  titleEnglish: "Wedding Reception · Kollam",
 
   // Photo shown with each word in the intro
   introPhotos: {
@@ -27,21 +27,25 @@ window.WEDDING = {
   // Portrait shown beside the names on the first screen
   heroPhoto: "photos/1.jpg",
 
-  // Main celebration guests attend (countdown target)
-  date: "2026-12-23T10:30:00+05:30",
-  muhurtham: "10:30 – 11:00 AM",
+  // The event this invitation is for (countdown, main card, maps, calendar)
+  date: "2026-12-25T17:00:00+05:30",
+  muhurtham: "5:00 – 9:00 PM",
   venue: {
-    name: "Newline Orchid",
-    address: "Outer Ring Road, East Nada, Guruvayur",
-    mapUrl: "https://maps.google.com/?q=Newline+Orchid+Guruvayur"
+    name: "NJ Convention Centre",
+    city: "Kollam",
+    address: "Cinemaparambu, Poruvazhy P.O., Kollam",
+    mapUrl: "https://maps.google.com/?q=NJ+Convention+Centre+Cinemaparambu+Poruvazhy"
   },
+
+  // The wedding itself (used by the intro's story: "where?" → Guruvayur, 23.12)
+  weddingDate: "2026-12-23T10:30:00+05:30",
 
 
   invitationMessage:
-    "With the blessings of our elders and the grace of Guruvayurappan, we invite you and your family to join us on the auspicious occasion of our marriage.",
+    "With the blessings of our elders and the grace of Guruvayurappan, we are getting married in Guruvayur on 23 December. We warmly invite you and your family to celebrate with us at our wedding reception in Kollam.",
 
   // Small notes shown under the muhurtham card (leave [] to hide)
-  notes: ["Presents in blessings only", "No reception on the previous day"],
+  notes: ["Presents in blessings only"],
 
   // Optional love-story timeline (leave [] to hide)
   story: [],
@@ -54,7 +58,7 @@ window.WEDDING = {
     },
     bride: {
       father: "Mr. P S Jayakumar",
-      mother: "Mrs. Bini Jayakumar",
+      mother: "Dr. Bini Jayakumar",
       place: "Achutham, Medical College P.O, Thrissur"
     }
   },
@@ -69,7 +73,7 @@ window.WEDDING = {
       durationHours: 1,
       venue: "Guruvayur Sreekrishna Temple",
       city: "Guruvayur", lat: 10.5945, lon: 76.0393,
-      address: "East Nada, Guruvayur",
+      address: "Guruvayur",
       mapUrl: "https://maps.google.com/?q=Guruvayur+Sreekrishna+Temple",
       rsvp: false // listed as a ceremony, but not in the RSVP picker
     },
@@ -80,9 +84,8 @@ window.WEDDING = {
       durationHours: 0.5,
       venue: "Newline Orchid",
       city: "Guruvayur", lat: 10.5960, lon: 76.0460,
-      address: "Outer Ring Road, East Nada, Guruvayur",
-      mapUrl: "https://maps.google.com/?q=Newline+Orchid+Guruvayur",
-      highlight: true
+      address: "Outer Ring Road, Guruvayur",
+      mapUrl: "https://maps.google.com/?q=Newline+Orchid+Guruvayur"
     },
     {
       name: "Reception · Kollam",
@@ -92,7 +95,8 @@ window.WEDDING = {
       venue: "NJ Convention Centre",
       city: "Kollam", lat: 9.0700, lon: 76.6500,
       address: "Cinemaparambu, Poruvazhy P.O., Kollam",
-      mapUrl: "https://maps.google.com/?q=NJ+Convention+Centre+Cinemaparambu+Poruvazhy"
+      mapUrl: "https://maps.google.com/?q=NJ+Convention+Centre+Cinemaparambu+Poruvazhy",
+      highlight: true
     },
     {
       name: "Reception · Thiruvananthapuram",

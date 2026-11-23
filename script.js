@@ -364,7 +364,7 @@
   /* ---------- Marquee ---------- */
   const fmtShort = (d) => fmt(d, { day: "2-digit", month: "2-digit", year: "numeric" }).replace(/\//g, " · ");
   const city = (ev) => (ev.address || "").split(",").pop().trim();
-  const line1 = ["Save the date", fmtShort(wDate), "Guruvayur", `${couple}`];
+  const line1 = ["Save the date", fmtShort(wDate), W.venue.city || "Guruvayur", `${couple}`];
   const line2 = W.events.filter((e) => e.date).map((e) => `${e.name.split("·")[0].trim()} · ${city(e)} · ${fmt(new Date(e.date), { day: "numeric", month: "short" })}`);
   const fill = (el, items) => {
     const chunk = items.map((t) => `<span>${t}</span><b>✦</b>`).join("");

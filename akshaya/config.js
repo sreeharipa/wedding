@@ -42,7 +42,8 @@ window.WEDDING = {
   muhurtham: "10:30 – 11:00 AM",
   venue: {
     name: "Newline Orchid",
-    address: "Outer Ring Road, East Nada, Guruvayur",
+    city: "Guruvayur",
+    address: "Outer Ring Road, Guruvayur",
     mapUrl: "https://maps.google.com/?q=Newline+Orchid+Guruvayur"
   },
 
@@ -64,7 +65,7 @@ window.WEDDING = {
     },
     bride: {
       father: "Mr. P S Jayakumar",
-      mother: "Mrs. Bini Jayakumar",
+      mother: "Dr. Bini Jayakumar",
       place: "Achutham, Medical College P.O, Thrissur"
     }
   },
@@ -79,7 +80,7 @@ window.WEDDING = {
       durationHours: 1,
       venue: "Guruvayur Sreekrishna Temple",
       city: "Guruvayur", lat: 10.5945, lon: 76.0393,
-      address: "East Nada, Guruvayur",
+      address: "Guruvayur",
       mapUrl: "https://maps.google.com/?q=Guruvayur+Sreekrishna+Temple",
       rsvp: false // listed as a ceremony, but not in the RSVP picker
     },
@@ -90,7 +91,7 @@ window.WEDDING = {
       durationHours: 0.5,
       venue: "Newline Orchid",
       city: "Guruvayur", lat: 10.5960, lon: 76.0460,
-      address: "Outer Ring Road, East Nada, Guruvayur",
+      address: "Outer Ring Road, Guruvayur",
       mapUrl: "https://maps.google.com/?q=Newline+Orchid+Guruvayur",
       highlight: true
     },

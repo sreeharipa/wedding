@@ -350,7 +350,7 @@ window.WeddingIntro = (() => {
     const p1 = pin(first, Wcfg.brideFirst ? IP.bride : IP.groom);
     const p2 = pin(second, Wcfg.brideFirst ? IP.groom : IP.bride);
     const venue = IP.venue || { city: "Guruvayur", lat: 10.594, lon: 76.041 };
-    const d = new Date(Wcfg.date);
+    const d = new Date(Wcfg.weddingDate || Wcfg.date);
     const f = (o) => new Intl.DateTimeFormat("en-IN", { timeZone: "Asia/Kolkata", ...o }).format(d);
     const dd = f({ day: "2-digit" }), mm = f({ month: "2-digit" }), yyyy = f({ year: "numeric" });
     const time = f({ hour: "2-digit", minute: "2-digit", hour12: false });
