@@ -8,9 +8,12 @@
  *       Execute as: Me
  *       Who has access: Anyone
  *     Deploy, allow access when Google asks, then copy the Web app URL (ends in /exec).
- *  4. Put that URL in config.js and akshaya/config.js as rsvpSheetUrl.
+ *  4. Put that URL in config.js (main site) as rsvpSheetUrl.
  *
- * Every RSVP from either website is added as a new row on the "RSVPs" tab.
+ * Do the same again with a second sheet (e.g. "Wedding RSVPs · Akshaya") and put that
+ * URL in akshaya/config.js, so each website's RSVPs land in their own sheet.
+ *
+ * Every RSVP is added as a new row on the "RSVPs" tab.
  */
 
 const SHEET_NAME = "RSVPs";
