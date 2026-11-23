@@ -126,7 +126,7 @@ window.WEDDING = {
 
   // RSVPs are saved as rows in a Google Sheet: paste the Apps Script web app URL (ends in /exec).
   // See rsvp-sheet.gs for the one-time setup. If this is empty, RSVPs fall back to WhatsApp.
-  rsvpSheetUrl: "",
+  rsvpSheetUrl: "https://script.google.com/macros/s/AKfycbz4fJ2o8_NbLEqDb3v6GLkXkfX-VuOMunN9VEIpiOSfaJCBEG9IwOLTMqxzwdWzgwilsQ/exec",
   rsvpSide: "Groom's side (main site)",
   // WhatsApp fallback. Country code + number, digits only, e.g. "919876543210"
   rsvpWhatsApp: "919647921150",
